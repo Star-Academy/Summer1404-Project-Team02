@@ -4,17 +4,20 @@
 
     <div class="form-field">
       <label for="username">Username</label>
-      <input pInputText id="username" autocomplete="off"/>
+      <input [value]="enteredUsername" (input)="enteredUsernameChangeHandler($event)" pInputText id="username"
+             autocomplete="off"/>
     </div>
 
     <div class="form-field">
       <label for="password">Password</label>
-      <input pInputText id="password" type="password" autocomplete="off"/>
+      <input [value]="enteredPassword" (input)="enteredPasswordChangeHandler($event)" pInputText id="password"
+             type="password" autocomplete="off"/>
     </div>
 
     <div class="form-field">
       <label for="email">Email</label>
-      <input pInputText id="email" type="email" autocomplete="off"/>
+      <input [value]="enteredEmail" (input)="enteredEmailChangeHandler($event)" pInputText id="email" type="email"
+             autocomplete="off"/>
     </div>
 
     <div class="p-dialog-footer">
