@@ -1,6 +1,8 @@
 <div class="card flex justify-center">
   <p-button (click)="showDialog()" label="Create User"/>
-  <p-dialog header="Create User" [modal]="true" [(visible)]="visible" [style]="{ width: '28rem' }">
+  <p-dialog dismissableMask closeOnEscape header="Create User" [modal]="true" [(visible)]="visible"
+            (onHide)="hideDialog()"
+            [style]="{ width: '28rem' }">
 
     <div class="form-field">
       <label for="username">Username</label>
@@ -21,8 +23,8 @@
     </div>
 
     <div class="p-dialog-footer">
-      <p-button label="Save" (click)="visible = false"></p-button>
-      <p-button label="Cancel" severity="secondary" (click)="visible = false"></p-button>
+      <p-button label="Save" (click)="submitHandler()"></p-button>
+      <p-button label="Cancel" severity="secondary" (click)="hideDialog()"></p-button>
     </div>
   </p-dialog>
 

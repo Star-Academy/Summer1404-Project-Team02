@@ -5,12 +5,12 @@ import {Subject, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {UserRow, TableColumn} from './typeModule';
 import {mockUsers} from './mockUsers';
-import {CreateUserComponent} from './register-user/create-user-component';
+import {CreateUserModal} from './register-user/create-user-modal';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableModule, CommonModule, CreateUserComponent],
+  imports: [TableModule, CommonModule, CreateUserModal],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
