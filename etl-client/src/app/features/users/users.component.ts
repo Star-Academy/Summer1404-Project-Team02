@@ -5,51 +5,54 @@ import {Subject, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
 import {UserRow, TableColumn} from './typeModule';
 import {mockUsers} from './mockUsers';
+import {CreateUserComponent} from './register-user/create-user-component';
 
 @Component({
-    selector: 'app-users',
-    standalone: true,
-    imports: [TableModule, CommonModule],
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss']
+  selector: 'app-users',
+  standalone: true,
+  imports: [TableModule, CommonModule, CreateUserComponent],
+  templateUrl: './users.component.html',
+  styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnDestroy {
-    private _users: UserRow[] = mockUsers.map(({password, ...rest}) => rest);
+  private _users: UserRow[] = mockUsers.map(({password, ...rest}) => rest);
 
-    columns: TableColumn<UserRow>[] = [
-        {key: 'id', label: 'ID'},
-        {key: 'username', label: 'Username'},
-        {key: 'email', label: 'Email'},
-        {key: 'role', label: 'Role'}
-    ];
+  columns: TableColumn<UserRow>[] = [
+    {key: 'id', label: 'ID'},
+    {key: 'username', label: 'Username'},
+    {key: 'email', label: 'Email'},
+    {key: 'role', label: 'Role'}
+  ];
 
-    enteredSearch = '';
-    private search$ = new Subject<string>();
-    private sub = new Subscription();
+  enteredSearch = '';
+  private search$ = new Subject<string>();
+  private sub = new Subscription();
 
-    @ViewChild('dt') dt?: Table;
+  @ViewChild('dt') dt?: Table;
 
-    constructor() {
-        this.sub.add(
-            this.search$.pipe(debounceTime(250), distinctUntilChanged()).subscribe(q => {
-                this.enteredSearch = q.trim();
-            })
-        );
-    }
+  registerDialogVisible = false;
 
-    get users(): UserRow[] {
-        const q = this.enteredSearch.trim().toLowerCase();
-        if (!q) return this._users;
-        return this._users.filter(u => u.username.toLowerCase().includes(q));
-    }
+  constructor() {
+    this.sub.add(
+      this.search$.pipe(debounceTime(250), distinctUntilChanged()).subscribe(q => {
+        this.enteredSearch = q.trim();
+      })
+    );
+  }
 
-    onSearchChange(event: Event) {
-        const input = event.target as HTMLInputElement;
-        console.log(input.value)
-        this.search$.next(input.value);
-    }
+  get users(): UserRow[] {
+    const q = this.enteredSearch.trim().toLowerCase();
+    if (!q) return this._users;
+    return this._users.filter(u => u.username.toLowerCase().includes(q));
+  }
 
-    ngOnDestroy(): void {
-        this.sub.unsubscribe();
-    }
+  onSearchChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    console.log(input.value)
+    this.search$.next(input.value);
+  }
+
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
 }
