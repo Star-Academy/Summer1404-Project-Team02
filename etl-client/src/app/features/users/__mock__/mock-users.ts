@@ -1,4 +1,4 @@
-import {User} from '../types/user.types';
+import {User} from '../models/user.model';
 
 export const mockUsers: User[] = [
   {id: "1", username: "Arash", password: "12345", email: "arash@gmail.com", role: "user"},

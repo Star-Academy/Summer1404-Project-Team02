@@ -3,14 +3,14 @@ import {TableModule, Table} from 'primeng/table';
 import {CommonModule} from '@angular/common';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {UserRow, TableColumn} from './types/user.types';
+import {UserRow, TableColumn} from './models/user.model';
 import {mockUsers} from './__mock__/mock-users';
-import {CreateUserModal} from './modals/create-user-modal/create-user-modal';
+import {CreateUserModalComponent} from './modals/create-user-modal/create-user-modal-component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [TableModule, CommonModule, CreateUserModal],
+  imports: [TableModule, CommonModule, CreateUserModalComponent],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
@@ -30,8 +30,6 @@ export class UsersComponent implements OnDestroy {
 
   @ViewChild('dt') dt?: Table;
 
-  registerDialogVisible = false;
-
   constructor() {
     this.sub.add(
       this.search$.pipe(debounceTime(250), distinctUntilChanged()).subscribe(q => {
@@ -41,14 +39,13 @@ export class UsersComponent implements OnDestroy {
   }
 
   get users(): UserRow[] {
-    const q = this.enteredSearch.trim().toLowerCase();
-    if (!q) return this._users;
-    return this._users.filter(u => u.username.toLowerCase().includes(q));
+    const searchQuery = this.enteredSearch.trim().toLowerCase();
+    if (!searchQuery) return this._users;
+    return this._users.filter(user => user.username.toLowerCase().includes(searchQuery));
   }
 
   onSearchChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    console.log(input.value)
     this.search$.next(input.value);
   }
 

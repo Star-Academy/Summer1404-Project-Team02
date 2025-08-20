@@ -1,5 +1,4 @@
 :root {
-  /* fallback variables — override these in global styles using your CustomPreset mapping */
   --primary: #ff8c00;
   --primary-600: #ff8c00;
   --surface-0: #ffffff;
@@ -15,7 +14,6 @@
   box-shadow: 0 8px 24px rgba(16, 24, 40, 0.06);
 }
 
-/* toolbar */
 .table-toolbar {
   display: flex;
   justify-content: space-between;
@@ -60,7 +58,6 @@
   }
 }
 
-/* table header styling (sticky) */
 :global(.p-table thead th) {
   position: sticky;
   top: 0;
@@ -74,7 +71,6 @@
   box-shadow: 0 2px 0 rgba(255, 255, 255, 0.02) inset;
 }
 
-/* zebra rows + hover lift */
 :global(.p-datatable-tbody > tr:nth-child(odd)) {
   background: rgba(0, 0, 0, 0.02);
 }
@@ -85,7 +81,6 @@
   transition: background .12s, transform .12s;
 }
 
-/* cells */
 :global(.p-table td, .p-table th) {
   padding: 0.75rem 1rem;
   vertical-align: middle;
@@ -95,14 +90,12 @@
   max-width: 20rem;
 }
 
-/* empty message */
 .empty {
   text-align: center;
   padding: 1.2rem;
   color: var(--muted);
 }
 
-/* responsive */
 @media (max-width: 640px) {
   .search .search-input {
     min-width: 12rem;
