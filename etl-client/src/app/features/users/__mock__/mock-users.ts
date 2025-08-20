@@ -1,4 +1,4 @@
-import {User} from './typeModule';
+import {User} from '../types/user.types';
 
 export const mockUsers: User[] = [
   {id: "1", username: "Arash", password: "12345", email: "arash@gmail.com", role: "user"},

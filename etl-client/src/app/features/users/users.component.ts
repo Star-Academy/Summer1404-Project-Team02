@@ -3,9 +3,9 @@ import {TableModule, Table} from 'primeng/table';
 import {CommonModule} from '@angular/common';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {UserRow, TableColumn} from './typeModule';
-import {mockUsers} from './mockUsers';
-import {CreateUserModal} from './register-user/create-user-modal';
+import {UserRow, TableColumn} from './types/user.types';
+import {mockUsers} from './__mock__/mock-users';
+import {CreateUserModal} from './modals/create-user-modal/create-user-modal';
 
 @Component({
   selector: 'app-users',
