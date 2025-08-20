@@ -1,4 +1,4 @@
-import {Component, ViewChild, OnDestroy} from '@angular/core';
+import {Component, ViewChild, OnDestroy, OnInit} from '@angular/core';
 import {TableModule, Table} from 'primeng/table';
 import {CommonModule} from '@angular/common';
 import {Subject, Subscription} from 'rxjs';
@@ -14,7 +14,7 @@ import {CreateUserModalComponent} from './modals/create-user-modal/create-user-m
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
-export class UsersComponent implements OnDestroy {
+export class UsersComponent implements OnDestroy, OnInit {
   private _users: UserRow[] = mockUsers.map(({password, ...rest}) => rest);
 
   columns: TableColumn<UserRow>[] = [
@@ -24,22 +24,22 @@ export class UsersComponent implements OnDestroy {
     {key: 'role', label: 'Role'}
   ];
 
-  enteredSearch = '';
+  public _enteredSearch = '';
   private search$ = new Subject<string>();
   private sub = new Subscription();
 
   @ViewChild('dt') dt?: Table;
 
-  constructor() {
+  ngOnInit() {
     this.sub.add(
       this.search$.pipe(debounceTime(250), distinctUntilChanged()).subscribe(q => {
-        this.enteredSearch = q.trim();
+        this._enteredSearch = q.trim();
       })
     );
   }
 
   get users(): UserRow[] {
-    const searchQuery = this.enteredSearch.trim().toLowerCase();
+    const searchQuery = this._enteredSearch.trim().toLowerCase();
     if (!searchQuery) return this._users;
     return this._users.filter(user => user.username.toLowerCase().includes(searchQuery));
   }

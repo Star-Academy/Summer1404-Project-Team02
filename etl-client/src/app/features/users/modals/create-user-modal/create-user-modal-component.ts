@@ -12,17 +12,16 @@ import {InputTextModule} from 'primeng/inputtext';
 })
 export class CreateUserModalComponent {
   public visible: boolean = false;
-  public enteredUsername: string = '';
+  protected enteredUsername: string = '';
   public enteredPassword: string = '';
   public enteredEmail: string = '';
 
-  private resetInputsValuesOnModalClose(): void {
+  private resetFormValuesOnModalClose(): void {
     this.enteredUsername = '';
     this.enteredPassword = '';
     this.enteredEmail = '';
     this.visible = false;
   }
-
 
   public enteredUsernameChangeHandler(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -44,7 +43,7 @@ export class CreateUserModalComponent {
   }
 
   public hideDialog() {
-    this.resetInputsValuesOnModalClose();
+    this.resetFormValuesOnModalClose();
   }
 
   public submitHandler() {
@@ -53,7 +52,7 @@ export class CreateUserModalComponent {
       password: this.enteredPassword,
       email: this.enteredEmail
     };
-    this.resetInputsValuesOnModalClose();
+    this.resetFormValuesOnModalClose();
   }
 }
 
