@@ -1,5 +1,4 @@
 using ETL.API.Infrastructure;
-using ETL.API.Middlewares;
 using ETL.Application;
 using ETL.Infrastructure;
 
@@ -22,7 +21,7 @@ builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -33,8 +32,6 @@ if (app.Environment.IsDevelopment())
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
-
-app.UseTokenRefresh();
 
 app.UseAuthentication();
 app.UseAuthorization();
