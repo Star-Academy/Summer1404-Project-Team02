@@ -17,7 +17,7 @@ export const CustomPreset = definePreset(Aura, {
       950: '#00452a',
     },
     colorScheme: {
-      root: {
+      dark: {
         surface: {
           0: '#121212',
           50: '#1e1e1e',
@@ -50,7 +50,7 @@ export const CustomPreset = definePreset(Aura, {
           activeColor: '{primary.800}'
         },
         highlight: {
-          background: 'rgba(255, 204, 128, .16)',
+          background: 'rgba(255, 204, 128, 1)',
           focusBackground: 'rgba(255, 204, 128, .24)',
           color: 'rgba(255,255,255,.87)',
           focusColor: 'rgba(255,255,255,.87)'

@@ -1,0 +1,12 @@
+@if (authStatus.status === "loading") {
+  <div class="skeleton skeleton-loading"></div>
+}
+
+@if (authStatus.status === "authenticated") {
+  <app-logout-btn/>
+
+}
+
+@if (authStatus.status === "unauthenticated") {
+  <app-sign-in-btn/>
+}

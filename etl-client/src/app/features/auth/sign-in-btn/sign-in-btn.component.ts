@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Button} from "primeng/button";
+import {Button, ButtonIcon, ButtonLabel} from "primeng/button";
 import {AuthService} from '../auth.service';
 import {ProgressSpinner} from 'primeng/progressspinner';
 
@@ -8,7 +8,9 @@ import {ProgressSpinner} from 'primeng/progressspinner';
   standalone: true,
   imports: [
     Button,
-    ProgressSpinner
+    ProgressSpinner,
+    ButtonIcon,
+    ButtonLabel
   ],
   templateUrl: './sign-in-btn.component.html',
   styleUrl: './sign-in-btn.component.scss'

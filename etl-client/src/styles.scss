@@ -31,3 +31,57 @@ body {
   border: 1px solid var(--p-surface-200);
   border-radius: 10px;
 }
+
+.skeleton {
+  position: relative;
+  display: inline-block;
+  border-radius: inherit;
+  background: var(rgba(255, 255, 255, 10%));
+  color: transparent !important;
+  overflow: hidden;
+
+  & > * {
+    visibility: hidden;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 10%) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: sk-shimmer var(--sk-speed, 1.2s) linear infinite;
+    pointer-events: none;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: var(--sk-bg-dark, #2b2f33);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation: none;
+    }
+  }
+}
+
+@keyframes sk-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-inline {
+  display: inline-block;
+  line-height: 1;
+}
+
