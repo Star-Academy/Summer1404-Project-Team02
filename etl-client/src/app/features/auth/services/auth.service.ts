@@ -3,16 +3,17 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../../users/models/user.model';
 import {ChangePasswordPayload, GetLoginUrlPayload, LoginCallbackPayload} from '../models/auth.model';
+import {UserService} from '../../users/services/user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private userService: UserService) {
   }
 
   public checkAuth(): Observable<User> {
-    return this.http.get<User>('/user/profile');
+    return this.userService.getMe()
   }
 
   public getLoginUrl(): Observable<GetLoginUrlPayload> {
