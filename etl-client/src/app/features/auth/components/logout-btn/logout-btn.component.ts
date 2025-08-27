@@ -18,6 +18,6 @@ export class LogoutBtnComponent {
   }
 
   protected signOut(): void {
-    this.authStore.logout().subscribe();
+    this.authStore.logout();
   }
 }

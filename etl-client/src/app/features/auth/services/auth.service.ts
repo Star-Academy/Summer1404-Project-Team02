@@ -2,8 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {User} from '../../users/models/user.model';
-import {ChangePasswordPayload} from '../models/auth.model';
-
+import {ChangePasswordPayload, GetLoginUrlPayload, LoginCallbackPayload} from '../models/auth.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +15,14 @@ export class AuthService {
     return this.http.get<User>('/user/profile');
   }
 
-  public getLoginUrl(): Observable<{ redirectUrl: string }> {
-    return this.http.get<{ redirectUrl: string }>(
+  public getLoginUrl(): Observable<GetLoginUrlPayload> {
+    return this.http.get<GetLoginUrlPayload>(
       '/auth/login?redirectPath=/auth/callback'
     );
   }
 
-  public exchangeCodeForSession(code: string, redirectPath: string): Observable<User> {
-    return this.http.post<User>('/auth/login-callback', {code, redirectPath});
+  public exchangeCodeForSession(data: LoginCallbackPayload): Observable<User> {
+    return this.http.post<User>('/auth/login-callback', {...data});
   }
 
   public changePassword(payload: ChangePasswordPayload): Observable<void> {

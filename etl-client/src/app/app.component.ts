@@ -12,7 +12,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.authStore.checkAuth().subscribe()
+    this.authStore.checkAuth();
   }
 
 }

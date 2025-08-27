@@ -1,56 +1,65 @@
 import {Injectable} from '@angular/core';
-import {BehaviorSubject, catchError, map, of} from 'rxjs';
+import {ComponentStore} from '@ngrx/component-store';
 import {AuthService} from '../services/auth.service';
-import {AuthState} from '../models/auth.model';
+import {exhaustMap} from 'rxjs';
+import {AuthState, LoginCallbackPayload} from '../models/auth.model';
+import {tapResponse} from '@ngrx/operators';
 import {User} from '../../users/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthStore {
-  private readonly _authState$ = new BehaviorSubject<AuthState>({status: 'loading'});
+export class AuthStore extends ComponentStore<AuthState> {
+  public readonly authState$ = this.select(state => state);
+  public readonly isAuthenticated$ = this.select(
+    state => state.status === 'authenticated'
+  );
+  public readonly user$ = this.select(
+    state => state.status === 'authenticated' ? state.user : null
+  );
 
   constructor(private authService: AuthService) {
+    super({status: 'loading'});
   }
 
-  get authState$() {
-    return this._authState$.asObservable();
-  }
+  public readonly setAuthState = this.updater<AuthState>((_, newState) => newState);
 
-  get currentState(): AuthState {
-    return this._authState$.value;
-  }
+  public readonly checkAuth = this.effect<void>(trigger$ =>
+    trigger$.pipe(
+      exhaustMap(() =>
+        this.authService.checkAuth().pipe(
+          tapResponse({
+            next: (user: User) => this.setAuthState({status: 'authenticated', user}),
+            error: () => this.setAuthState({status: 'unauthenticated'}),
+          })
+        )
+      )
+    )
+  );
 
-  public checkAuth() {
-    return this.authService.checkAuth().pipe(
-      map((user: User) => {
-        const state: AuthState = {status: 'authenticated', user};
-        this._authState$.next(state);
-        return state;
-      }),
-      catchError(() => {
-        const state: AuthState = {status: 'unauthenticated'};
-        this._authState$.next(state);
-        return of(state);
-      })
-    );
-  }
+  public readonly exchangeCodeForSession = this.effect<LoginCallbackPayload>(params$ =>
+    params$.pipe(
+      exhaustMap(({code, redirectPath}) =>
+        this.authService.exchangeCodeForSession({code, redirectPath}).pipe(
+          tapResponse({
+            next: (user: User) => this.setAuthState({status: 'authenticated', user}),
+            error: () => this.setAuthState({status: 'unauthenticated'}),
+          })
+        )
+      )
+    )
+  );
 
-  public exchangeCodeForSession(code: string, redirectPath: string) {
-    return this.authService.exchangeCodeForSession(code, redirectPath).pipe(
-      map((user: User) => {
-        const state: AuthState = {status: 'authenticated', user};
-        this._authState$.next(state);
-        return user;
-      })
-    );
-  }
-
-  public logout() {
-    return this.authService.logout().pipe(
-      map(() => {
-        this._authState$.next({status: 'unauthenticated'});
-      })
-    );
-  }
+  public readonly logout = this.effect<void>(trigger$ =>
+    trigger$.pipe(
+      exhaustMap(() =>
+        this.authService.logout().pipe(
+          tapResponse({
+            next: () => this.setAuthState({status: 'unauthenticated'}),
+            error: () => this.setAuthState({status: 'unauthenticated'}),
+          })
+        )
+      )
+    )
+  );
 }

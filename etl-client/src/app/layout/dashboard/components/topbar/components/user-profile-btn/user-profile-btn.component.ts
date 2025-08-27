@@ -31,9 +31,8 @@ export class UserProfileBtnComponent implements OnInit {
       {
         label: "Logout", icon: "pi pi-sign-out",
         command: () => {
-          this.authStore.logout().subscribe(() => {
-            this.router.navigate(['/']);
-          });
+          this.authStore.logout();
+          this.router.navigate(['/']);
         }
       }];
   }

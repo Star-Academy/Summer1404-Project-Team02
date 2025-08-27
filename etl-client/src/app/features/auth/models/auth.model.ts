@@ -10,3 +10,12 @@ export interface ChangePasswordPayload {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface GetLoginUrlPayload {
+  redirectUrl: string
+}
+
+export interface LoginCallbackPayload {
+  code: string,
+  redirectPath: string
+}

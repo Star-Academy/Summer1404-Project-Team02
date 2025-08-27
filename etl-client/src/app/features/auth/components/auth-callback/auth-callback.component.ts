@@ -19,10 +19,20 @@ export class AuthCallbackComponent implements OnInit {
 
   ngOnInit() {
     const code = this.route.snapshot.queryParamMap.get('code');
+
     if (code) {
-      this.authStore.exchangeCodeForSession(code, '/auth/callback').subscribe({
-        next: () => this.router.navigate(['/dashboard']),
-        error: () => this.router.navigate(['/'])
+      this.authStore.exchangeCodeForSession({code, redirectPath: '/auth/callback'});
+
+      this.authStore.isAuthenticated$.subscribe(isAuth => {
+        if (isAuth) {
+          this.router.navigate(['/dashboard']);
+        }
+      });
+
+      this.authStore.authState$.subscribe(state => {
+        if (state.status === 'unauthenticated') {
+          this.router.navigate(['/']);
+        }
       });
     } else {
       this.router.navigate(['/']);
