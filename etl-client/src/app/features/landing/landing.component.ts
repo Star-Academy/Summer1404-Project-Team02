@@ -8,5 +8,6 @@ import {Component} from '@angular/core';
   styleUrl: './landing.component.scss'
 })
 export class LandingComponent {
-  protected itemCount = Array(8).fill(0).map(i => ({id: i + 1}));
+  protected itemCount = Array(8).fill(0).map((_, index) => ({id: index + 1}));
+
 }

@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
 import {MainComponent} from './layout/main/main.component';
-import {AuthCallbackComponent} from './features/auth/auth-callback/auth-callback.component';
-import {AuthGuard} from './features/auth/auth.guard';
+import {AuthCallbackComponent} from './features/auth/components/auth-callback/auth-callback.component';
+import {AuthGuard} from './features/auth/guards/auth.guard';
 
 export const appRoutes: Routes = [
   {

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {AuthService} from '../auth.service';
+import {AuthStore} from '../../store/auth.store';
 
 @Component({
   selector: 'app-auth-callback',
@@ -13,14 +13,14 @@ export class AuthCallbackComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private authService: AuthService
+    private authStore: AuthStore
   ) {
   }
 
   ngOnInit() {
     const code = this.route.snapshot.queryParamMap.get('code');
     if (code) {
-      this.authService.exchangeCodeForSession(code, '/auth/callback').subscribe({
+      this.authStore.exchangeCodeForSession(code, '/auth/callback').subscribe({
         next: () => this.router.navigate(['/dashboard']),
         error: () => this.router.navigate(['/'])
       });

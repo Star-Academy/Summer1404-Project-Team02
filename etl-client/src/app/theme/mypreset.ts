@@ -17,7 +17,7 @@ export const CustomPreset = definePreset(Aura, {
       950: '#00452a',
     },
     colorScheme: {
-      dark: {
+      light: {
         surface: {
           0: '#121212',
           50: '#1e1e1e',
@@ -56,6 +56,45 @@ export const CustomPreset = definePreset(Aura, {
           focusColor: 'rgba(255,255,255,.87)'
         }
       },
+      dark: {
+        surface: {
+          0: '#ffffff',
+          50: '#fafafa',
+          100: '#f5f5f5',
+          200: '#eeeeee',
+          300: '#e0e0e0',
+          400: '#d6d6d6',
+          500: '#cfcfcf',
+          600: '#bdbdbd',
+          700: '#9e9e9e',
+          800: '#7d7d7d',
+          900: '#616161',
+          950: '#424242',
+        },
+        text: {
+          color: '#212121',
+          secondary: '#424242',
+          muted: '#757575',
+        },
+        primary: {
+          color: '{primary.600}',
+          inverseColor: '#ffffff',
+          hoverColor: '{primary.700}',
+          activeColor: '{primary.800}'
+        },
+        secondary: {
+          color: '{primary.100}',
+          inverseColor: '#212121',
+          hoverColor: '{primary.200}',
+          activeColor: '{primary.300}'
+        },
+        highlight: {
+          background: 'rgba(255, 224, 178, 1)',
+          focusBackground: 'rgba(255, 224, 178, .24)',
+          color: '#212121',
+          focusColor: '#212121'
+        }
+      }
     },
   },
 });
