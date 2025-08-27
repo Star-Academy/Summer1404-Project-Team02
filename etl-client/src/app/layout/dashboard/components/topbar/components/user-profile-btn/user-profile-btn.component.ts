@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Button} from "primeng/button";
 import {Menu} from "primeng/menu";
 import {MenuItem} from 'primeng/api';
-import {AuthService} from '../../../../../../features/auth/services/auth.service';
 import {Router} from '@angular/router';
 import {AuthStore} from '../../../../../../features/auth/store/auth.store';
 
