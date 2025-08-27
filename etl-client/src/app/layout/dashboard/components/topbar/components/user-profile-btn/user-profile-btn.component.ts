@@ -4,6 +4,7 @@ import {Menu} from "primeng/menu";
 import {MenuItem} from 'primeng/api';
 import {AuthService} from '../../../../../../features/auth/services/auth.service';
 import {Router} from '@angular/router';
+import {AuthStore} from '../../../../../../features/auth/store/auth.store';
 
 @Component({
   selector: 'app-user-profile-btn',
@@ -19,7 +20,7 @@ import {Router} from '@angular/router';
 export class UserProfileBtnComponent implements OnInit {
   protected menuItems!: MenuItem[];
 
-  constructor(private authService: AuthService, private router: Router,) {
+  constructor(private authStore: AuthStore, private router: Router,) {
   }
 
   ngOnInit() {
@@ -31,7 +32,7 @@ export class UserProfileBtnComponent implements OnInit {
       {
         label: "Logout", icon: "pi pi-sign-out",
         command: () => {
-          this.authService.logout().subscribe(() => {
+          this.authStore.logout().subscribe(() => {
             this.router.navigate(['/']);
           });
         }
