@@ -3,9 +3,9 @@ import {TableModule, Table} from 'primeng/table';
 import {CommonModule} from '@angular/common';
 import {Subject, Subscription} from 'rxjs';
 import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
-import {UserRow, TableColumn} from './models/user.model';
+import {TableColumn, User} from './models/user.model';
 import {mockUsers} from './__mock__/mock-users';
-import {CreateUserModalComponent} from './modals/create-user-modal/create-user-modal-component';
+import {CreateUserModalComponent} from './create-user-modal/create-user-modal-component';
 
 @Component({
   selector: 'app-users',
@@ -15,9 +15,9 @@ import {CreateUserModalComponent} from './modals/create-user-modal/create-user-m
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements OnDestroy, OnInit {
-  private _users: UserRow[] = mockUsers.map(({password, ...rest}) => rest);
+  private _users: User[] = mockUsers;
 
-  columns: TableColumn<UserRow>[] = [
+  columns: TableColumn<User>[] = [
     {key: 'id', label: 'ID'},
     {key: 'username', label: 'Username'},
     {key: 'email', label: 'Email'},
@@ -38,7 +38,7 @@ export class UsersComponent implements OnDestroy, OnInit {
     );
   }
 
-  get users(): UserRow[] {
+  get users(): User[] {
     const searchQuery = this._enteredSearch.trim().toLowerCase();
     if (!searchQuery) return this._users;
     return this._users.filter(user => user.username.toLowerCase().includes(searchQuery));

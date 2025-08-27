@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Button, ButtonIcon, ButtonLabel} from "primeng/button";
-import {AuthService} from '../auth.service';
+import {AuthService} from '../../services/auth.service';
 import {ProgressSpinner} from 'primeng/progressspinner';
 
 @Component({

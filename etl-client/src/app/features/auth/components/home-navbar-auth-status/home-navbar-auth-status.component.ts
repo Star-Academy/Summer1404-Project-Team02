@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {AuthService, AuthState} from '../auth.service';
 import {SignInBtnComponent} from '../sign-in-btn/sign-in-btn.component';
 import {LogoutBtnComponent} from '../logout-btn/logout-btn.component';
+import {AuthState} from '../../models/auth.model';
+import {AuthStore} from '../../store/auth.store';
 
 @Component({
   selector: 'app-home-navbar-auth-status',
@@ -16,11 +17,11 @@ import {LogoutBtnComponent} from '../logout-btn/logout-btn.component';
 export class HomeNavbarAuthStatusComponent implements OnInit {
   protected authStatus!: AuthState;
 
-  constructor(private authService: AuthService) {
+  constructor(private authStore: AuthStore) {
   }
 
   ngOnInit() {
-    this.authService.authState$.subscribe(state => {
+    this.authStore.authState$.subscribe(state => {
       this.authStatus = state
     })
   }

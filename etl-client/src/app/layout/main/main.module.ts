@@ -5,7 +5,7 @@ import {RouterModule} from '@angular/router';
 import {mainRoutes} from './main.routes';
 import {LandingComponent} from '../../features/landing/landing.component';
 import {NavbarComponent} from "./components/navbar/navbar.component";
-import {AuthCallbackComponent} from '../../features/auth/auth-callback/auth-callback.component';
+import {AuthCallbackComponent} from '../../features/auth/components/auth-callback/auth-callback.component';
 
 
 @NgModule({

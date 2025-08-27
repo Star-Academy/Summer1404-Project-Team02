@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {AuthService} from '../auth.service';
 import {Button, ButtonIcon, ButtonLabel} from 'primeng/button';
+import {AuthStore} from '../../store/auth.store';
 
 @Component({
   selector: 'app-logout-btn',
@@ -14,10 +14,10 @@ import {Button, ButtonIcon, ButtonLabel} from 'primeng/button';
   styleUrl: './logout-btn.component.scss'
 })
 export class LogoutBtnComponent {
-  constructor(private authService: AuthService) {
+  constructor(private authStore: AuthStore) {
   }
 
   protected signOut(): void {
-    this.authService.logout().subscribe();
+    this.authStore.logout().subscribe();
   }
 }

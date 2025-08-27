@@ -47,11 +47,6 @@ export class CreateUserModalComponent {
   }
 
   public submitHandler() {
-    const newUser = {
-      username: this.enteredUsername,
-      password: this.enteredPassword,
-      email: this.enteredEmail
-    };
     this.resetFormValuesOnModalClose();
   }
 }
