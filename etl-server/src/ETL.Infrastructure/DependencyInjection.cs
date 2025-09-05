@@ -1,11 +1,20 @@
-﻿using ETL.Application.Abstractions.Security;
+﻿using System.Data;
+using ETL.Application.Abstractions.Data;
+using ETL.Application.Abstractions.Repositories;
+using ETL.Application.Abstractions.Security;
 using ETL.Application.Abstractions.UserServices;
-using ETL.Infrastructure.OAuth;
-using ETL.Infrastructure.OAuth.Abstractions;
+using ETL.Infrastructure.Data;
+using ETL.Infrastructure.Data.Abstractions;
+using ETL.Infrastructure.OAuthClients;
+using ETL.Infrastructure.OAuthClients.Abstractions;
+using ETL.Infrastructure.Repositories;
 using ETL.Infrastructure.Security;
 using ETL.Infrastructure.UserServices;
+using ETL.Infrastructure.UserServices.Abstractions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Npgsql;
+using SqlKata.Compilers;
 
 namespace ETL.Infrastructure;
 
@@ -27,28 +36,45 @@ public static class DependencyInjection
                     };
                 });
 
-        services.AddScoped<IOAuthGetJson, OAuthGetJsonClient>();
-        services.AddScoped<IOAuthGetJsonArray, OAuthGetJsonArrayClient>();
-        services.AddScoped<IOAuthPostJson, OAuthPostJsonClient>();
-        services.AddScoped<IOAuthPutJson, OAuthPutJsonClient>();
-        services.AddScoped<IOAuthDeleteJson, OAuthDeleteJsonClient>();
-        services.AddScoped<IOAuthPostJsonWithResponse, OAuthPostJsonWithResponseClient>();
+        services.AddSingleton<IOAuthGetJson, OAuthGetJsonClient>();
+        services.AddSingleton<IOAuthGetJsonArray, OAuthGetJsonArrayClient>();
+        services.AddSingleton<IOAuthPostJson, OAuthPostJsonClient>();
+        services.AddSingleton<IOAuthPutJson, OAuthPutJsonClient>();
+        services.AddSingleton<IOAuthDeleteJson, OAuthDeleteJsonClient>();
+        services.AddSingleton<IOAuthPostJsonWithResponse, OAuthPostJsonWithResponseClient>();
 
-        services.AddScoped<IOAuthUserReader, OAuthUserReader>();
-        services.AddScoped<IOAuthAllUserReader, OAuthAllUserReader>();
-        services.AddScoped<IOAuthUserRoleGetter, OAuthUserRoleGetter>();
-        services.AddScoped<IOAuthUserCreator, OAuthUserCreator>();
-        services.AddScoped<IOAuthUserUpdater, OAuthUserUpdater>();
-        services.AddScoped<IOAuthUserDeleter, OAuthUserDeleter>();
-        services.AddScoped<IRoleRemover, RoleRemover>();
-        services.AddScoped<IOAuthRoleAssigner, OAuthRoleAssigner>();
-        services.AddScoped<IOAuthUserRoleChanger, OAuthUserRoleChanger>();
-        services.AddScoped<IAdminTokenService, AdminTokenService>();
-        services.AddScoped<IAuthCodeForTokenExchanger, AuthCodeForTokenExchanger>();
-        services.AddScoped<ITokenRefresher, AuthTokenRefresher>();
-        services.AddScoped<IAuthCredentialValidator, AuthCredentialValidator>();
-        services.AddScoped<IAuthRestPasswordService, AuthRestPasswordService>();
-        services.AddScoped<IAuthLogoutService, AuthLogoutService>();
+        services.AddSingleton<IUserFetcher, UserFetcher>();
+        services.AddSingleton<IUserJsonMapper, UserJsonMapper>();
+        services.AddSingleton<IUsersRoleFetcher, UsersRoleFetcher>();
+        services.AddSingleton<IUserRoleAssigner, UserRoleAssigner>();
+
+        services.AddSingleton<IOAuthUserReader, OAuthUserReader>();
+        services.AddSingleton<IOAuthAllUserReader, OAuthAllUserReader>();
+        services.AddSingleton<IOAuthUserRoleGetter, OAuthUserRoleGetter>();
+        services.AddSingleton<IOAuthUserCreator, OAuthUserCreator>();
+        services.AddSingleton<IOAuthUserUpdater, OAuthUserUpdater>();
+        services.AddSingleton<IOAuthUserDeleter, OAuthUserDeleter>();
+        services.AddSingleton<IOAuthRoleRemover, OAuthRoleRemover>();
+        services.AddSingleton<IOAuthRoleAssigner, OAuthRoleAssigner>();
+        services.AddSingleton<IOAuthUserRoleChanger, OAuthUserRoleChanger>();
+        services.AddSingleton<IAdminTokenService, AdminTokenService>();
+        services.AddSingleton<IAuthCodeForTokenExchanger, AuthCodeForTokenExchanger>();
+        services.AddSingleton<IAuthTokenRefresher, AuthTokenRefresher>();
+        services.AddSingleton<IAuthCredentialValidator, AuthCredentialValidator>();
+        services.AddSingleton<IAuthRestPasswordService, AuthRestPasswordService>();
+        services.AddSingleton<IAuthLogoutService, AuthLogoutService>();
+
+        services.AddScoped<Compiler, PostgresCompiler>();
+        services.AddScoped<IDbExecutor, DapperDbExecutor>();
+        services.AddScoped<IPostgresCopyAdapter, PostgresCopyAdapter>();
+        services.AddScoped<IQueryCompiler, SqlKataCompilerAdapter>();
+        services.AddScoped<IDbConnection>(sp =>
+        {
+            return new NpgsqlConnection(config.GetConnectionString("DefaultConnection"));
+        });
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IStagingTableRepository, StagingTableRepository>();
+        services.AddScoped<IDataSetRepository, DataSetRepository>();
 
 
         return services;
