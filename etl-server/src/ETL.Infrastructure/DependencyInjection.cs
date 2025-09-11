@@ -1,4 +1,5 @@
 ﻿using ETL.Application.Abstractions.Data;
+using ETL.Application.Abstractions.Pipelines;
 using ETL.Application.Abstractions.Repositories;
 using ETL.Application.Abstractions.Security;
 using ETL.Application.Abstractions.UserServices;
@@ -11,8 +12,11 @@ using ETL.Infrastructure.Repositories.Abstractions;
 using ETL.Infrastructure.Repositories.DataSets;
 using ETL.Infrastructure.Repositories.StagingTables;
 using ETL.Infrastructure.Security;
+using ETL.Infrastructure.Transform.PipelineOperations;
 using ETL.Infrastructure.UserServices;
 using ETL.Infrastructure.UserServices.Abstractions;
+using ETL.Infrastructure.WorkflowContexts;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SqlKata.Compilers;
@@ -88,6 +92,16 @@ public static class DependencyInjection
         services.AddSingleton<IStagingColumnExists, StagingColumnExistsOperation>();
         services.AddSingleton<IGetStagingTableByName, GetStagingTableByName>();
 
+        services.AddDbContext<WorkflowDbContext>(options =>
+            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+        services.AddDbContextFactory<WorkflowDbContext>(options =>
+            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+
+        services.AddSingleton<IGetAllPipelines, GetAllPipelines>();
+        services.AddSingleton<IGetPipelineById, GetPipelineById>();
+        services.AddSingleton<ICreatePipeline, CreatePipeline>();
+        services.AddSingleton<IRenamePipeline, RenamePipeline>();
+        services.AddSingleton<IDeletePipeline, DeletePipeline>();
 
         return services;
     }
