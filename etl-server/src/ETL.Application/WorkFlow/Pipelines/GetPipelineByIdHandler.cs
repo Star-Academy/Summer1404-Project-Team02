@@ -1,18 +1,29 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
+using ETL.Application.Common;
+using ETL.Application.Common.DTOs;
 using ETL.Domain.Entities;
 using MediatR;
 
 namespace ETL.Application.WorkFlow.Pipelines;
 
-public record GetPipelineByIdQuery(Guid Id) : IRequest<Pipeline?>;
+public record GetPipelineByIdQuery(Guid Id) : IRequest<Result<PipelineDto>>;
 
 
-public class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuery, Pipeline?>
+public class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuery, Result<PipelineDto>>
 {
-    private readonly IGetPipelineById _service;
+    private readonly IGetPipelineById _getPipelineById;
 
-    public GetPipelineByIdHandler(IGetPipelineById service) => _service = service;
+    public GetPipelineByIdHandler(IGetPipelineById getPipelineById) => _getPipelineById = getPipelineById;
 
-    public Task<Pipeline?> Handle(GetPipelineByIdQuery request, CancellationToken cancellationToken) =>
-        _service.ExecuteAsync(request.Id, cancellationToken);
+    public async Task<Result<PipelineDto>> Handle(GetPipelineByIdQuery request, CancellationToken cancellationToken)
+    {
+        var pipeline = await _getPipelineById.ExecuteAsync(request.Id, cancellationToken);
+        if (pipeline == null)
+            return Result.Failure<PipelineDto>(
+                Error.NotFound("PipelineGet.Failed", $"Pipeline {request.Id} not found!"));
+
+        var pipelineDto = new PipelineDto(pipeline.Id, pipeline.Name, pipeline.DataSourceId, pipeline.DataSource,
+            pipeline.Steps, pipeline.CreatedAt);
+        return Result.Success(pipelineDto);
+    }
 }

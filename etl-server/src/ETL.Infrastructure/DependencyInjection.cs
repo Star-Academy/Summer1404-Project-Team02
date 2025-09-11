@@ -91,9 +91,7 @@ public static class DependencyInjection
         services.AddSingleton<IDeleteStagingColumn, DeleteStagingColumnOperation>();
         services.AddSingleton<IStagingColumnExists, StagingColumnExistsOperation>();
         services.AddSingleton<IGetStagingTableByName, GetStagingTableByName>();
-
-        services.AddDbContext<WorkflowDbContext>(options =>
-            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+        
         services.AddDbContextFactory<WorkflowDbContext>(options =>
             options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
 

@@ -1,16 +1,26 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
+using ETL.Application.Common;
+using ETL.Application.Common.DTOs;
 using ETL.Domain.Entities;
 using MediatR;
 
 namespace ETL.Application.WorkFlow.Pipelines;
-public record GetAllPipelinesQuery() : IRequest<IEnumerable<Pipeline>>;
+public record GetAllPipelinesQuery() : IRequest<Result<IEnumerable<PipelineDto>>>;
 
-public class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuery, IEnumerable<Pipeline>>
+public class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuery, Result<IEnumerable<PipelineDto>>>
 {
-    private readonly IGetAllPipelines _service;
+    private readonly IGetAllPipelines _getAllPipelines;
 
-    public GetAllPipelinesHandler(IGetAllPipelines service) => _service = service;
+    public GetAllPipelinesHandler(IGetAllPipelines getAllPipelines) => _getAllPipelines = getAllPipelines;
 
-    public Task<IEnumerable<Pipeline>> Handle(GetAllPipelinesQuery request, CancellationToken cancellationToken) =>
-        _service.ExecuteAsync(cancellationToken);
+    public async Task<Result<IEnumerable<PipelineDto>>> Handle(GetAllPipelinesQuery request, CancellationToken cancellationToken)
+    {
+        var items = await _getAllPipelines.ExecuteAsync(cancellationToken);
+        var pipelineDtos = items
+            .Select(p => new PipelineDto(p.Id, p.Name, p.DataSourceId, p.DataSource, p.Steps, p.CreatedAt))
+            .ToList();
+
+        return Result.Success<IEnumerable<PipelineDto>>(pipelineDtos);
+        
+    }
 }

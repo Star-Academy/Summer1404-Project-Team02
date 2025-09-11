@@ -1,20 +1,30 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
+using ETL.Application.Common;
 using MediatR;
 
 namespace ETL.Application.WorkFlow.Pipelines;
 
-public record DeletePipelineCommand(Guid Id) : IRequest;
+public record DeletePipelineCommand(Guid Id) : IRequest<Result>;
 
 
-public class DeletePipelineHandler : IRequestHandler<DeletePipelineCommand>
+public class DeletePipelineHandler : IRequestHandler<DeletePipelineCommand, Result>
 {
-    private readonly IDeletePipeline _service;
+    private readonly IDeletePipeline _deletePipeline;
+    private readonly IGetPipelineById _getPipelineById;
 
-    public DeletePipelineHandler(IDeletePipeline service) => _service = service;
-
-    public async Task Handle(DeletePipelineCommand request, CancellationToken cancellationToken)
+    public DeletePipelineHandler(IDeletePipeline deletePipeline, IGetPipelineById getPipelineById)
     {
-        await _service.ExecuteAsync(request.Id, cancellationToken);
-        //return Unit.Value;
+        _deletePipeline = deletePipeline;
+        _getPipelineById = getPipelineById;
+    }
+
+    public async Task<Result> Handle(DeletePipelineCommand request, CancellationToken cancellationToken)
+    {
+        var pipeline = await _getPipelineById.ExecuteAsync(request.Id, cancellationToken);
+        if (pipeline == null)
+            return Result.Failure(Error.NotFound("PipelineDelete.Failed", $"Pipeline {request.Id} not found!"));
+        
+        await _deletePipeline.ExecuteAsync(request.Id, cancellationToken);
+        return Result.Success();
     }
 }

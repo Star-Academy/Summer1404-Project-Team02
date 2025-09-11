@@ -1,5 +1,5 @@
-﻿using ETL.Application.WorkFlow.Pipelines;
-using ETL.Domain.Entities;
+﻿using ETL.API.Infrastructure;
+using ETL.Application.WorkFlow.Pipelines;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,36 +14,45 @@ public class PipelinesController : ControllerBase
     public PipelinesController(IMediator mediator) => _mediator = mediator;
 
     [HttpGet]
-    public async Task<IEnumerable<Pipeline>> GetAll(CancellationToken ct)
+    public async Task<IActionResult> GetAll(CancellationToken ct)
     {
-        return await _mediator.Send(new GetAllPipelinesQuery(), ct);
+        var result = await _mediator.Send(new GetAllPipelinesQuery(), ct);
+        return Ok(result.Value);
     }
 
     [HttpGet("get-pipeline")]
-    public async Task<ActionResult<Pipeline>> GetById(GetPipelineByIdQuery request, CancellationToken ct)
+    public async Task<IActionResult> GetById([FromQuery]GetPipelineByIdQuery request, CancellationToken ct)
     {
-        var pipeline = await _mediator.Send(request, ct);
-        return pipeline == null ? NotFound() : Ok(pipeline);
+        var result = await _mediator.Send(request, ct);
+        if (result.IsFailure)
+            return this.ToActionResult(result.Error);
+        return Ok(result.Value);
     }
 
     [HttpPost("create-pipeline")]
-    public async Task<Guid> Create([FromBody] CreatePipelineCommand command, CancellationToken ct)
+    public async Task<IActionResult> Create([FromBody] CreatePipelineCommand command, CancellationToken ct)
     {
-        
-        return await _mediator.Send(command, ct);
+        var result = await _mediator.Send(command, ct);
+        if (result.IsFailure)
+            return this.ToActionResult(result.Error);
+        return Ok(result.Value);
     }
 
     [HttpPut("rename-pipeline")]
     public async Task<IActionResult> Rename(RenamePipelineCommand request, CancellationToken ct)
     {
-        await _mediator.Send(request, ct);
-        return Ok(new { message = "Column has been renamed." });
+        var result = await _mediator.Send(request, ct);
+        if (result.IsFailure)
+            return this.ToActionResult(result.Error);
+        return Ok(new { message = "pipeline has been renamed." });
     }
 
     [HttpDelete("delete-pipeline")]
     public async Task<IActionResult> Delete(DeletePipelineCommand command, CancellationToken ct)
     {
-        await _mediator.Send(command, ct);
+        var result = await _mediator.Send(command, ct);
+        if (result.IsFailure)
+            return this.ToActionResult(result.Error);
         return Ok(new { message = "Pipeline has been removed." });
     }
 }
