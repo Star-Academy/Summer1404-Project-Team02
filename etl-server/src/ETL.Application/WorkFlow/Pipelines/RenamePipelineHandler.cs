@@ -6,7 +6,7 @@ namespace ETL.Application.WorkFlow.Pipelines;
 
 public record RenamePipelineCommand(Guid Id, string NewName) : IRequest<Result>;
 
-public class RenamePipelineHandler : IRequestHandler<RenamePipelineCommand,  Result>
+public sealed class RenamePipelineHandler : IRequestHandler<RenamePipelineCommand, Result>
 {
     private readonly IRenamePipeline _renamePipeline;
     private readonly IGetPipelineById _getPipelineById;
@@ -22,7 +22,7 @@ public class RenamePipelineHandler : IRequestHandler<RenamePipelineCommand,  Res
         var pipeline = await _getPipelineById.ExecuteAsync(request.Id, cancellationToken);
         if (pipeline == null)
             return Result.Failure(Error.NotFound("PipelineDelete.Failed", $"Pipeline {request.Id} not found!"));
-        
+
         await _renamePipeline.ExecuteAsync(request.Id, request.NewName, cancellationToken);
         return Result.Success();
     }

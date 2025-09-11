@@ -1,13 +1,12 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
 using ETL.Application.Common;
 using ETL.Application.Common.DTOs;
-using ETL.Domain.Entities;
 using MediatR;
 
 namespace ETL.Application.WorkFlow.Pipelines;
 public record GetAllPipelinesQuery() : IRequest<Result<IEnumerable<PipelineDto>>>;
 
-public class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuery, Result<IEnumerable<PipelineDto>>>
+public sealed class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuery, Result<IEnumerable<PipelineDto>>>
 {
     private readonly IGetAllPipelines _getAllPipelines;
 
@@ -21,6 +20,6 @@ public class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuery, Resu
             .ToList();
 
         return Result.Success<IEnumerable<PipelineDto>>(pipelineDtos);
-        
+
     }
 }

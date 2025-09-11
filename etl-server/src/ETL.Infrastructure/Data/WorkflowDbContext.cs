@@ -1,7 +1,7 @@
 ﻿using ETL.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace ETL.Infrastructure.WorkflowContexts;
+namespace ETL.Infrastructure.Data;
 
 public class WorkflowDbContext : DbContext
 {
@@ -14,11 +14,11 @@ public class WorkflowDbContext : DbContext
     public DbSet<PipelineStep> PipelineSteps { get; set; }
     public DbSet<DataSetMetadata> DataSources { get; set; } // Add this
 
-    
+
     public WorkflowDbContext()
     {
     }
-    
+
     // protected override void OnConfiguring(DbContextOptionsBuilder options)
     // {
     //     if (!options.IsConfigured)
@@ -73,5 +73,5 @@ public class WorkflowDbContext : DbContext
         });
     }
 
-    
+
 }

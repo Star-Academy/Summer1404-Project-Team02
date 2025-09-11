@@ -1,7 +1,6 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
 using ETL.Application.Common;
 using ETL.Application.Common.DTOs;
-using ETL.Domain.Entities;
 using MediatR;
 
 namespace ETL.Application.WorkFlow.Pipelines;
@@ -9,7 +8,7 @@ namespace ETL.Application.WorkFlow.Pipelines;
 public record GetPipelineByIdQuery(Guid Id) : IRequest<Result<PipelineDto>>;
 
 
-public class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuery, Result<PipelineDto>>
+public sealed class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuery, Result<PipelineDto>>
 {
     private readonly IGetPipelineById _getPipelineById;
 

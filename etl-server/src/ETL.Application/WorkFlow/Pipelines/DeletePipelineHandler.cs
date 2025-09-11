@@ -7,7 +7,7 @@ namespace ETL.Application.WorkFlow.Pipelines;
 public record DeletePipelineCommand(Guid Id) : IRequest<Result>;
 
 
-public class DeletePipelineHandler : IRequestHandler<DeletePipelineCommand, Result>
+public sealed class DeletePipelineHandler : IRequestHandler<DeletePipelineCommand, Result>
 {
     private readonly IDeletePipeline _deletePipeline;
     private readonly IGetPipelineById _getPipelineById;
@@ -23,7 +23,7 @@ public class DeletePipelineHandler : IRequestHandler<DeletePipelineCommand, Resu
         var pipeline = await _getPipelineById.ExecuteAsync(request.Id, cancellationToken);
         if (pipeline == null)
             return Result.Failure(Error.NotFound("PipelineDelete.Failed", $"Pipeline {request.Id} not found!"));
-        
+
         await _deletePipeline.ExecuteAsync(request.Id, cancellationToken);
         return Result.Success();
     }

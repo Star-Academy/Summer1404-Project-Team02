@@ -8,7 +8,7 @@ namespace ETL.Application.WorkFlow.Pipelines;
 
 public record CreatePipelineCommand(string Name, Guid DataSourceId) : IRequest<Result<Guid>>;
 
-public class CreatePipelineHandler : IRequestHandler<CreatePipelineCommand, Result<Guid>>
+public sealed class CreatePipelineHandler : IRequestHandler<CreatePipelineCommand, Result<Guid>>
 {
     private readonly ICreatePipeline _createPipeline;
     private readonly IGetDataSetById _getDataSetById;
@@ -25,10 +25,10 @@ public class CreatePipelineHandler : IRequestHandler<CreatePipelineCommand, Resu
         if (dataset == null)
             return Result.Failure<Guid>(Error.NotFound("PipelineCreate.Failed",
                 $"Data Source {request.DataSourceId} not found"));
-        
+
         // if pipeline names should be unique, add it to constraints and check it here.
         var pipeline = new Pipeline(request.Name, request.DataSourceId);
-        var created =  await _createPipeline.ExecuteAsync(pipeline, cancellationToken);
+        var created = await _createPipeline.ExecuteAsync(pipeline, cancellationToken);
         return Result.Success(created);
     }
 }

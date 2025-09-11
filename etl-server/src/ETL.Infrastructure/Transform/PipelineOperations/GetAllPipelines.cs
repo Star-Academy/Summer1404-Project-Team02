@@ -1,6 +1,6 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
 using ETL.Domain.Entities;
-using ETL.Infrastructure.WorkflowContexts;
+using ETL.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace ETL.Infrastructure.Transform.PipelineOperations;

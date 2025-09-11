@@ -11,7 +11,7 @@ public class PipelinesController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PipelinesController(IMediator mediator) => _mediator = mediator;
+    public PipelinesController(IMediator mediator) => _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HttpGet]
     public async Task<IActionResult> GetAll(CancellationToken ct)
@@ -21,7 +21,7 @@ public class PipelinesController : ControllerBase
     }
 
     [HttpGet("get-pipeline")]
-    public async Task<IActionResult> GetById([FromQuery]GetPipelineByIdQuery request, CancellationToken ct)
+    public async Task<IActionResult> GetById([FromQuery] GetPipelineByIdQuery request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
         if (result.IsFailure)
