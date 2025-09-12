@@ -13,6 +13,6 @@ public class GetAllPipelines : IGetAllPipelines
     public async Task<IEnumerable<Pipeline>> ExecuteAsync(CancellationToken cancellationToken = default)
     {
         await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        return await context.Pipelines.AsNoTracking().Include(p => p.Steps).ToListAsync(cancellationToken);
+        return await context.Pipelines.AsNoTracking().Include(p => p.Plugins).ToListAsync(cancellationToken);
     }
 }

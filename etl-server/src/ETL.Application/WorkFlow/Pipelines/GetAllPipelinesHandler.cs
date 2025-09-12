@@ -16,7 +16,7 @@ public sealed class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuer
     {
         var items = await _getAllPipelines.ExecuteAsync(cancellationToken);
         var pipelineDtos = items
-            .Select(p => new PipelineDto(p.Id, p.Name, p.DataSourceId, p.DataSource, p.Steps, p.CreatedAt))
+            .Select(p => new PipelineDto(p.Id, p.Name, p.DataSourceId, p.DataSource, p.Plugins, p.CreatedAt))
             .ToList();
 
         return Result.Success<IEnumerable<PipelineDto>>(pipelineDtos);

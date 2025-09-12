@@ -10,8 +10,8 @@ public class Pipeline : BaseEntity
     public Guid DataSourceId { get; private set; }
     public DataSetMetadata DataSource { get; private set; }
 
-    // Navigation to steps
-    public List<PipelineStep> Steps { get; private set; } = new();
+    // Navigation to plugins
+    public List<Plugin> Plugins { get; private set; } = new();
 
     private Pipeline() { } // Required by EF Core
 
@@ -21,9 +21,9 @@ public class Pipeline : BaseEntity
         DataSourceId = dataSourceId;
     }
 
-    public void AddStep(PipelineStep step)
+    public void AddPlugin(Plugin plugin)
     {
-        Steps.Add(step);
+        Plugins.Add(plugin);
     }
     
     public void Rename(string newName)

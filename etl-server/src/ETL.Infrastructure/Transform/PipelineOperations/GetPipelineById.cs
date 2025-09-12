@@ -13,7 +13,7 @@ public class GetPipelineById : IGetPipelineById
     public async Task<Pipeline?> ExecuteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        return await context.Pipelines.Include(p => p.Steps)
+        return await context.Pipelines.Include(p => p.Plugins)
             .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace ETL.Domain.Entities;
 
-public class PipelineStep : BaseEntity
+public class Plugin : BaseEntity
 {
     public Guid PipelineId { get; private set; } // FK to Pipeline
     public Pipeline Pipeline { get; private set; }
@@ -11,9 +11,9 @@ public class PipelineStep : BaseEntity
     public string PluginType { get; private set; }
     public string Configuration { get; private set; }
 
-    private PipelineStep() { } // EF Core
+    private Plugin() { } // EF Core
 
-    public PipelineStep(Guid pipelineId, int stepOrder, string pluginType, string configuration)
+    public Plugin(Guid pipelineId, int stepOrder, string pluginType, string configuration)
     {
         PipelineId = pipelineId;
         StepOrder = stepOrder;

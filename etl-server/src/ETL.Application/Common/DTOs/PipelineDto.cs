@@ -9,6 +9,6 @@ namespace ETL.Application.Common.DTOs;
 //     public string Name { get; set; }
 //     public Guid DataSourceId { get; set; }
 //     public DataSetMetadata DataSource { get; set; }
-//     public List<PipelineStep> Steps { get; set; }
+//     public List<Plugin> Plugins { get; set; }
 // }
-public record PipelineDto(Guid Id, string Name, Guid DataSourceId, DataSetMetadata DataSource, List<PipelineStep> Steps, DateTime CreatedAt);
+public record PipelineDto(Guid Id, string Name, Guid DataSourceId, DataSetMetadata DataSource, List<Plugin> Plugins, DateTime CreatedAt);

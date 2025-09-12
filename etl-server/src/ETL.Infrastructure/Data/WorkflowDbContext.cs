@@ -11,21 +11,13 @@ public class WorkflowDbContext : DbContext
     }
 
     public DbSet<Pipeline> Pipelines { get; set; }
-    public DbSet<PipelineStep> PipelineSteps { get; set; }
+    public DbSet<Plugin> Plugins { get; set; }
     public DbSet<DataSetMetadata> DataSources { get; set; } // Add this
 
 
     public WorkflowDbContext()
     {
     }
-
-    // protected override void OnConfiguring(DbContextOptionsBuilder options)
-    // {
-    //     if (!options.IsConfigured)
-    //     {
-    //         options.UseNpgsql("Host=localhost;Port=5432;Database=staracademy;Username=postgres;Password=pas123");
-    //     }
-    // }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -50,8 +42,8 @@ public class WorkflowDbContext : DbContext
             entity.HasKey(p => p.Id);
             entity.Property(p => p.Name).IsRequired().HasMaxLength(255);
 
-            // Pipeline → PipelineStep (1:N)
-            entity.HasMany(p => p.Steps)
+            // Pipeline → Plugin (1:N)
+            entity.HasMany(p => p.Plugins)
                 .WithOne(s => s.Pipeline)
                 .HasForeignKey(s => s.PipelineId)
                 .OnDelete(DeleteBehavior.Cascade);
@@ -63,8 +55,8 @@ public class WorkflowDbContext : DbContext
                 .OnDelete(DeleteBehavior.Restrict); // don’t delete DataSet when Pipeline is deleted
         });
 
-        // Configure PipelineStep
-        modelBuilder.Entity<PipelineStep>(entity =>
+        // Configure Plugin
+        modelBuilder.Entity<Plugin>(entity =>
         {
             entity.HasKey(s => s.Id);
 

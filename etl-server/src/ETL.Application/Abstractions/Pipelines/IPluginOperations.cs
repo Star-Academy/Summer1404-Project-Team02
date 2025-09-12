@@ -1,0 +1,28 @@
+﻿using ETL.Domain.Entities;
+
+namespace ETL.Application.Abstractions.Pipelines;
+
+public interface IGetPluginsByPipelineId
+{
+    Task<IEnumerable<Plugin>> ExecuteAsync(Guid pipelineId, CancellationToken cancellationToken = default);
+}
+
+public interface IGetPluginById
+{
+    Task<Plugin?> ExecuteAsync(Guid pluginId, CancellationToken cancellationToken = default);
+}
+
+public interface IAddPlugin
+{
+    Task ExecuteAsync(Plugin plugin, CancellationToken cancellationToken = default);
+}
+
+public interface IUpdatePlugin
+{
+    Task ExecuteAsync(Plugin plugin, CancellationToken cancellationToken = default);
+}
+
+public interface IDeletePlugin
+{
+    Task ExecuteAsync(Guid pluginId, CancellationToken cancellationToken = default);
+}

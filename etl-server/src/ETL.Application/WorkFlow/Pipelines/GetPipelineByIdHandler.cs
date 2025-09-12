@@ -22,7 +22,7 @@ public sealed class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuer
                 Error.NotFound("PipelineGet.Failed", $"Pipeline {request.Id} not found!"));
 
         var pipelineDto = new PipelineDto(pipeline.Id, pipeline.Name, pipeline.DataSourceId, pipeline.DataSource,
-            pipeline.Steps, pipeline.CreatedAt);
+            pipeline.Plugins, pipeline.CreatedAt);
         return Result.Success(pipelineDto);
     }
 }
