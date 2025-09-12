@@ -17,12 +17,12 @@ public interface ICreatePipeline
     Task<Guid> ExecuteAsync(Pipeline pipeline, CancellationToken cancellationToken = default);
 }
 
-public interface IRenamePipeline
+public interface IUpdatePipeline
 {
     Task ExecuteAsync(Guid id, string newName, CancellationToken cancellationToken = default);
 }
 
 public interface IDeletePipeline
 {
-    Task ExecuteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(Pipeline pipeline, CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,5 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
+using ETL.Domain.Entities;
 using ETL.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,13 +10,9 @@ public class DeletePipeline : IDeletePipeline
     private readonly IDbContextFactory<WorkflowDbContext> _contextFactory;
     public DeletePipeline(IDbContextFactory<WorkflowDbContext> contextFactory) => _contextFactory = contextFactory;
 
-    public async Task ExecuteAsync(Guid id, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(Pipeline pipeline, CancellationToken cancellationToken = default)
     {
         await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-        var pipeline = await context.Pipelines.FindAsync(new object[] { id }, cancellationToken);
-        if (pipeline == null)
-            throw new KeyNotFoundException($"Pipeline {id} not found");
-
         context.Pipelines.Remove(pipeline);
         await context.SaveChangesAsync(cancellationToken);
     }

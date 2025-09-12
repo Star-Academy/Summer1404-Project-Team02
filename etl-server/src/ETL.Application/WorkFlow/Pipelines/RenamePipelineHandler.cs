@@ -8,12 +8,12 @@ public record RenamePipelineCommand(Guid Id, string NewName) : IRequest<Result>;
 
 public sealed class RenamePipelineHandler : IRequestHandler<RenamePipelineCommand, Result>
 {
-    private readonly IRenamePipeline _renamePipeline;
+    private readonly IUpdatePipeline _updatePipeline;
     private readonly IGetPipelineById _getPipelineById;
 
-    public RenamePipelineHandler(IRenamePipeline renamePipeline, IGetPipelineById getPipelineById)
+    public RenamePipelineHandler(IUpdatePipeline updatePipeline, IGetPipelineById getPipelineById)
     {
-        _renamePipeline = renamePipeline;
+        _updatePipeline = updatePipeline;
         _getPipelineById = getPipelineById;
     }
 
@@ -23,7 +23,7 @@ public sealed class RenamePipelineHandler : IRequestHandler<RenamePipelineComman
         if (pipeline == null)
             return Result.Failure(Error.NotFound("PipelineDelete.Failed", $"Pipeline {request.Id} not found!"));
 
-        await _renamePipeline.ExecuteAsync(request.Id, request.NewName, cancellationToken);
+        await _updatePipeline.ExecuteAsync(request.Id, request.NewName, cancellationToken);
         return Result.Success();
     }
 }

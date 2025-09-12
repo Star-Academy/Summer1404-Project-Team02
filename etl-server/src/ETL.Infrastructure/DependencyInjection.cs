@@ -98,7 +98,7 @@ public static class DependencyInjection
         services.AddSingleton<IGetAllPipelines, GetAllPipelines>();
         services.AddSingleton<IGetPipelineById, GetPipelineById>();
         services.AddSingleton<ICreatePipeline, CreatePipeline>();
-        services.AddSingleton<IRenamePipeline, RenamePipeline>();
+        services.AddSingleton<IUpdatePipeline, UpdatePipeline>();
         services.AddSingleton<IDeletePipeline, DeletePipeline>();
         
         services.AddSingleton<IGetPluginById, GetPluginById>();

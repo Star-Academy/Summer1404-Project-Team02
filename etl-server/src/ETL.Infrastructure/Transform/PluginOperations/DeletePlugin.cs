@@ -1,4 +1,5 @@
 ﻿using ETL.Application.Abstractions.Pipelines;
+using ETL.Domain.Entities;
 using ETL.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,14 +14,9 @@ public sealed class DeletePlugin : IDeletePlugin
         _contextFactory = contextFactory;
     }
 
-    public async Task ExecuteAsync(Guid pluginId, CancellationToken cancellationToken = default)
+    public async Task ExecuteAsync(Plugin plugin, CancellationToken cancellationToken = default)
     {
         await using var context = await _contextFactory.CreateDbContextAsync(cancellationToken);
-
-        var plugin = await context.Plugins.FirstOrDefaultAsync(p => p.Id == pluginId, cancellationToken);
-        if (plugin == null)
-            return; // Or throw NotFoundException if you prefer
-
         context.Plugins.Remove(plugin);
         await context.SaveChangesAsync(cancellationToken);
     }

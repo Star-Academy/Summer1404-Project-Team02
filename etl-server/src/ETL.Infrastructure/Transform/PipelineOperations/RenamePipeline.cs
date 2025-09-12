@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ETL.Infrastructure.Transform.PipelineOperations;
 
-public class RenamePipeline : IRenamePipeline
+public class UpdatePipeline : IUpdatePipeline
 {
     private readonly IDbContextFactory<WorkflowDbContext> _contextFactory;
-    public RenamePipeline(IDbContextFactory<WorkflowDbContext> contextFactory) => _contextFactory = contextFactory;
+    public UpdatePipeline(IDbContextFactory<WorkflowDbContext> contextFactory) => _contextFactory = contextFactory;
 
     public async Task ExecuteAsync(Guid id, string newName, CancellationToken cancellationToken = default)
     {

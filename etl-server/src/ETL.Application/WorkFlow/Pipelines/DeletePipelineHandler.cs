@@ -24,7 +24,7 @@ public sealed class DeletePipelineHandler : IRequestHandler<DeletePipelineComman
         if (pipeline == null)
             return Result.Failure(Error.NotFound("PipelineDelete.Failed", $"Pipeline {request.Id} not found!"));
 
-        await _deletePipeline.ExecuteAsync(request.Id, cancellationToken);
+        await _deletePipeline.ExecuteAsync(pipeline, cancellationToken);
         return Result.Success();
     }
 }

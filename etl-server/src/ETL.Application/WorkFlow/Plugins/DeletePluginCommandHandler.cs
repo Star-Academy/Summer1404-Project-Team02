@@ -26,7 +26,7 @@ public sealed class DeletePluginCommandHandler : IRequestHandler<DeletePluginCom
                 Error.NotFound("PluginDelete.Failed", $"Plugin {request.PluginId} not found"));
         }
 
-        await _deletePlugin.ExecuteAsync(request.PluginId, cancellationToken);
+        await _deletePlugin.ExecuteAsync(plugin, cancellationToken);
 
         return Result.Success();
     }

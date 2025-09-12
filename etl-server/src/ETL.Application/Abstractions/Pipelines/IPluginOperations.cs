@@ -24,5 +24,5 @@ public interface IUpdatePlugin
 
 public interface IDeletePlugin
 {
-    Task ExecuteAsync(Guid pluginId, CancellationToken cancellationToken = default);
+    Task ExecuteAsync(Plugin plugin, CancellationToken cancellationToken = default);
 }
