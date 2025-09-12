@@ -21,8 +21,7 @@ public sealed class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuer
             return Result.Failure<PipelineDto>(
                 Error.NotFound("PipelineGet.Failed", $"Pipeline {request.Id} not found!"));
 
-        var pipelineDto = new PipelineDto(pipeline.Id, pipeline.Name, pipeline.DataSourceId, pipeline.DataSource,
-            pipeline.Plugins, pipeline.CreatedAt);
+        var pipelineDto = new PipelineDto(pipeline.Id, pipeline.Name, pipeline.DataSourceId, pipeline.CreatedAt);
         return Result.Success(pipelineDto);
     }
 }
