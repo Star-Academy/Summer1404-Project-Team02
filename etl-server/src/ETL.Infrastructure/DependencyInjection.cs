@@ -29,17 +29,8 @@ public static class DependencyInjection
     {
         services.AddOAuth(config);
         services.AddPolicyAuthorization(config);
-
-        services.AddHttpClient(string.Empty)
-                .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    // ⚠️ WARNING: DANGEROUS - FOR DEVELOPMENT ONLY
-                    // This handler bypasses SSL certificate validation.
-                    return new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
-                });
+        
+        services.AddHttpClient(string.Empty);
 
         services.AddSingleton<IOAuthGetJson, OAuthGetJsonClient>();
         services.AddSingleton<IOAuthGetJsonArray, OAuthGetJsonArrayClient>();
