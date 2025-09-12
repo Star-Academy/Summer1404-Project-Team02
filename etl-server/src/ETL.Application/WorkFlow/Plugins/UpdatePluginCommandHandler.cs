@@ -24,7 +24,6 @@ public sealed class UpdatePluginCommandHandler : IRequestHandler<UpdatePluginCom
         if (plugin == null)
             return Result.Failure(Error.NotFound("Plugin.Update", $"Plugin {request.PluginId} not found"));
 
-        // only update configuration
         plugin.ChangeConfiguration(request.Configuration);
 
         await _updatePlugin.ExecuteAsync(plugin, cancellationToken);

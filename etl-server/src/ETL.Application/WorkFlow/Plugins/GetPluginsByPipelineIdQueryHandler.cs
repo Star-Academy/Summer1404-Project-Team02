@@ -32,7 +32,7 @@ public sealed class GetPluginsByPipelineIdQueryHandler
 
         var items = await _getPluginsByPipelineId.ExecuteAsync(request.PipelineId, cancellationToken);
         var pluginDtos = items
-            .Select(p => new PluginDto(p.Id, p.PipelineId, p.PluginType, p.Configuration, p.CreatedAt))
+            .Select(p => new PluginDto(p.Id, p.PipelineId, p.StepOrder, p.PluginType, p.Configuration, p.CreatedAt))
             .ToList();
         return Result.Success<IEnumerable<PluginDto>>(pluginDtos);
     }
