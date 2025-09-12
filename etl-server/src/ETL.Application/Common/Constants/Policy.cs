@@ -9,9 +9,9 @@ public static class Policy
     public const string CanReadUser = "CanReadUser";
     public const string CanReadRoles = "CanReadRoles";
     public const string CanUploadFile = "CanUploadFile";
-    public const string CanReadAllDataSets = "CanReadAllDataSets";
-    public const string CanRenameTable = "CanRenameTable";
-    public const string CanRenameColumn = "CanRenameColumn";
-    public const string CanDeleteTable = "CanDeleteTable";
-    public const string CanDeleteColumn = "CanDeleteColumn";
+    public const string CanReadDataSets = "CanReadDataSets";
+    public const string CanManipulateDataSets = "CanManipulateDataSets";
+    public const string CanManageWorkflows = "CanManageWorkflows";
+    public const string CanViewWorkflows = "CanViewWorkflows"; 
+    
 }

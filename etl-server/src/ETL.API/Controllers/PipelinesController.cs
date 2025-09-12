@@ -1,6 +1,9 @@
 ﻿using ETL.API.Infrastructure;
+using ETL.Application.Common.Constants;
 using ETL.Application.WorkFlow.Pipelines;
+using ETL.Application.WorkFlow.Plugins;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETL.API.Controllers;
@@ -14,6 +17,7 @@ public class PipelinesController : ControllerBase
     public PipelinesController(IMediator mediator) => _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HttpGet]
+    [Authorize(Policy = Policy.CanViewWorkflows)]
     public async Task<IActionResult> GetAll(CancellationToken ct)
     {
         var result = await _mediator.Send(new GetAllPipelinesQuery(), ct);
@@ -21,6 +25,7 @@ public class PipelinesController : ControllerBase
     }
 
     [HttpGet("{pipelineId}")]
+    [Authorize(Policy = Policy.CanViewWorkflows)]
     public async Task<IActionResult> GetById(Guid pipelineId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetPipelineByIdQuery(pipelineId), ct);
@@ -28,8 +33,20 @@ public class PipelinesController : ControllerBase
             return this.ToActionResult(result.Error);
         return Ok(result.Value);
     }
+    
+    [HttpGet("{pipelineId}/get-plugins")]
+    [Authorize(Policy = Policy.CanViewWorkflows)]
+    public async Task<IActionResult> GetAll(Guid pipelineId, CancellationToken ct)
+    {
+        var result = await _mediator.Send(new GetPluginsByPipelineIdQuery(pipelineId), ct);
+        if (result.IsFailure)
+            return this.ToActionResult(result.Error);
+    
+        return Ok(result.Value);
+    }
 
     [HttpPost("create-pipeline")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Create([FromBody] CreatePipelineCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);
@@ -39,6 +56,7 @@ public class PipelinesController : ControllerBase
     }
 
     [HttpPut("rename-pipeline")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Rename(RenamePipelineCommand request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
@@ -48,6 +66,7 @@ public class PipelinesController : ControllerBase
     }
 
     [HttpDelete("delete-pipeline")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Delete(DeletePipelineCommand command, CancellationToken ct)
     {
         var result = await _mediator.Send(command, ct);

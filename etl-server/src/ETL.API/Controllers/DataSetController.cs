@@ -42,7 +42,7 @@ public class DataSetsController : ControllerBase
     }
 
     [HttpGet("{tableName}")]
-    [Authorize(Policy = Policy.CanReadAllDataSets)]
+    [Authorize(Policy = Policy.CanReadDataSets)]
     public async Task<IActionResult> GetTable(string tableName, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetTableByNameQuery(tableName), cancellationToken);
@@ -53,7 +53,7 @@ public class DataSetsController : ControllerBase
     }
 
     [HttpGet("all")]
-    [Authorize(Policy = Policy.CanReadAllDataSets)]
+    [Authorize(Policy = Policy.CanReadDataSets)]
     public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(new GetAllDataSetsQuery(), cancellationToken);
@@ -61,7 +61,7 @@ public class DataSetsController : ControllerBase
     }
 
     [HttpPut("rename-table")]
-    [Authorize(Policy = Policy.CanRenameTable)]
+    [Authorize(Policy = Policy.CanManipulateDataSets)]
     public async Task<IActionResult> RenameTable([FromBody] RenameTableCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -73,7 +73,7 @@ public class DataSetsController : ControllerBase
     }
 
     [HttpPut("rename-column")]
-    [Authorize(Policy = Policy.CanRenameColumn)]
+    [Authorize(Policy = Policy.CanManipulateDataSets)]
     public async Task<IActionResult> RenameColumn(RenameColumnCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -87,7 +87,7 @@ public class DataSetsController : ControllerBase
 
 
     [HttpDelete("remove-table")]
-    [Authorize(Policy = Policy.CanDeleteTable)]
+    [Authorize(Policy = Policy.CanManipulateDataSets)]
     public async Task<IActionResult> DeleteTable(DeleteTableCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);
@@ -99,7 +99,7 @@ public class DataSetsController : ControllerBase
     }
 
     [HttpDelete("remove-column")]
-    [Authorize(Policy = Policy.CanDeleteColumn)]
+    [Authorize(Policy = Policy.CanManipulateDataSets)]
     public async Task<IActionResult> DeleteColumn(DeleteColumnCommand request, CancellationToken cancellationToken)
     {
         var result = await _mediator.Send(request, cancellationToken);

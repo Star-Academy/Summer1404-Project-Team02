@@ -1,6 +1,8 @@
 ﻿using ETL.API.Infrastructure;
+using ETL.Application.Common.Constants;
 using ETL.Application.WorkFlow.Plugins;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ETL.API.Controllers;
@@ -16,17 +18,8 @@ public class PluginsController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("{pipelineId}/get-plugins")]
-    public async Task<IActionResult> GetAll(Guid pipelineId, CancellationToken ct)
-    {
-        var result = await _mediator.Send(new GetPluginsByPipelineIdQuery(pipelineId), ct);
-        if (result.IsFailure)
-            return this.ToActionResult(result.Error);
-    
-        return Ok(result.Value);
-    } //perhaps should go to pipeline controller
-
     [HttpGet("{pluginId}")]
+    [Authorize(Policy = Policy.CanViewWorkflows)]
     public async Task<IActionResult> GetById(Guid pluginId, CancellationToken ct)
     {
         var result = await _mediator.Send(new GetPluginByIdQuery(pluginId), ct);
@@ -37,6 +30,7 @@ public class PluginsController : ControllerBase
     }
 
     [HttpPost("add")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Add([FromBody] AddPluginCommand request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
@@ -47,6 +41,7 @@ public class PluginsController : ControllerBase
     }
 
     [HttpPut("update")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Update([FromBody] UpdatePluginCommand request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
@@ -57,6 +52,7 @@ public class PluginsController : ControllerBase
     }
 
     [HttpDelete("delete")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Delete([FromBody] DeletePluginCommand request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
