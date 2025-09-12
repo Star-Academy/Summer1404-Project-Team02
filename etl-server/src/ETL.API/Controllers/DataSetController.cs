@@ -41,11 +41,11 @@ public class DataSetsController : ControllerBase
         return Ok(new { message = "File has been stored in database." });
     }
 
-    [HttpGet]
+    [HttpGet("{tableName}")]
     [Authorize(Policy = Policy.CanReadAllDataSets)]
-    public async Task<IActionResult> GetTable([FromQuery] GetTableByNameQuery request, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetTable(string tableName, CancellationToken cancellationToken)
     {
-        var result = await _mediator.Send(request, cancellationToken);
+        var result = await _mediator.Send(new GetTableByNameQuery(tableName), cancellationToken);
         if (result.IsFailure)
             return this.ToActionResult(result.Error);
 

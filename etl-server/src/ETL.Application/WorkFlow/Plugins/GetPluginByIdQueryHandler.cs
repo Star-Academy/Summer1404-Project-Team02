@@ -1,0 +1,30 @@
+﻿using ETL.Application.Abstractions.Pipelines;
+using ETL.Application.Common;
+using ETL.Domain.Entities;
+using MediatR;
+
+namespace ETL.Application.WorkFlow.Plugins;
+
+public record GetPluginByIdQuery(Guid PluginId) : IRequest<Result<Plugin>>;
+
+public sealed class GetPluginByIdQueryHandler : IRequestHandler<GetPluginByIdQuery, Result<Plugin>>
+{
+    private readonly IGetPluginById _getPluginById;
+
+    public GetPluginByIdQueryHandler(IGetPluginById getPluginById)
+    {
+        _getPluginById = getPluginById;
+    }
+
+    public async Task<Result<Plugin>> Handle(GetPluginByIdQuery request, CancellationToken cancellationToken)
+    {
+        var plugin = await _getPluginById.ExecuteAsync(request.PluginId, cancellationToken);
+        if (plugin is null)
+        {
+            return Result.Failure<Plugin>(
+                Error.NotFound("PluginGet.Failed", $"Plugin {request.PluginId} not found"));
+        }
+
+        return Result.Success(plugin);
+    }
+}

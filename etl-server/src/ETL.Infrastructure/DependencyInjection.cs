@@ -13,6 +13,7 @@ using ETL.Infrastructure.Repositories.DataSets;
 using ETL.Infrastructure.Repositories.StagingTables;
 using ETL.Infrastructure.Security;
 using ETL.Infrastructure.Transform.PipelineOperations;
+using ETL.Infrastructure.Transform.PluginOperations;
 using ETL.Infrastructure.UserServices;
 using ETL.Infrastructure.UserServices.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -99,6 +100,12 @@ public static class DependencyInjection
         services.AddSingleton<ICreatePipeline, CreatePipeline>();
         services.AddSingleton<IRenamePipeline, RenamePipeline>();
         services.AddSingleton<IDeletePipeline, DeletePipeline>();
+        
+        services.AddSingleton<IGetPluginById, GetPluginById>();
+        services.AddSingleton<IGetPluginsByPipelineId, GetPluginsByPipelineId>();
+        services.AddSingleton<IAppendPlugin, AppendPlugin>();
+        services.AddSingleton<IUpdatePlugin, UpdatePlugin>();
+        services.AddSingleton<IDeletePlugin, DeletePlugin>();
 
         return services;
     }

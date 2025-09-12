@@ -20,4 +20,9 @@ public class Plugin : BaseEntity
         PluginType = pluginType;
         Configuration = configuration;
     }
+
+    public void ChangeConfiguration(string configuration)
+    {
+        Configuration = configuration;
+    }
 }

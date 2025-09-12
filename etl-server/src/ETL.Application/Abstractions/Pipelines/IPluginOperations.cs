@@ -12,9 +12,9 @@ public interface IGetPluginById
     Task<Plugin?> ExecuteAsync(Guid pluginId, CancellationToken cancellationToken = default);
 }
 
-public interface IAddPlugin
+public interface IAppendPlugin
 {
-    Task ExecuteAsync(Plugin plugin, CancellationToken cancellationToken = default);
+    Task<Guid> ExecuteAsync(Guid pipelineId, string pluginType, string configuration, CancellationToken cancellationToken = default);
 }
 
 public interface IUpdatePlugin

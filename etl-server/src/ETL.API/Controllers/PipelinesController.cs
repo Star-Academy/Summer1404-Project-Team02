@@ -20,10 +20,10 @@ public class PipelinesController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("get-pipeline")]
-    public async Task<IActionResult> GetById([FromQuery] GetPipelineByIdQuery request, CancellationToken ct)
+    [HttpGet("{pipelineId}")]
+    public async Task<IActionResult> GetById(Guid pipelineId, CancellationToken ct)
     {
-        var result = await _mediator.Send(request, ct);
+        var result = await _mediator.Send(new GetPipelineByIdQuery(pipelineId), ct);
         if (result.IsFailure)
             return this.ToActionResult(result.Error);
         return Ok(result.Value);
