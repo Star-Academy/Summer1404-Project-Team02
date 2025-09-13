@@ -1,4 +1,5 @@
 ﻿using ETL.Application.Abstractions.Data;
+using ETL.Application.Abstractions.Pipelines;
 using ETL.Application.Abstractions.Repositories;
 using ETL.Application.Abstractions.Security;
 using ETL.Application.Abstractions.UserServices;
@@ -11,8 +12,11 @@ using ETL.Infrastructure.Repositories.Abstractions;
 using ETL.Infrastructure.Repositories.DataSets;
 using ETL.Infrastructure.Repositories.StagingTables;
 using ETL.Infrastructure.Security;
+using ETL.Infrastructure.Transform.PipelineOperations;
+using ETL.Infrastructure.Transform.PluginOperations;
 using ETL.Infrastructure.UserServices;
 using ETL.Infrastructure.UserServices.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SqlKata.Compilers;
@@ -25,17 +29,8 @@ public static class DependencyInjection
     {
         services.AddOAuth(config);
         services.AddPolicyAuthorization(config);
-
-        services.AddHttpClient(string.Empty)
-                .ConfigurePrimaryHttpMessageHandler(() =>
-                {
-                    // ⚠️ WARNING: DANGEROUS - FOR DEVELOPMENT ONLY
-                    // This handler bypasses SSL certificate validation.
-                    return new HttpClientHandler
-                    {
-                        ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-                    };
-                });
+        
+        services.AddHttpClient(string.Empty);
 
         services.AddSingleton<IOAuthGetJson, OAuthGetJsonClient>();
         services.AddSingleton<IOAuthGetJsonArray, OAuthGetJsonArrayClient>();
@@ -87,6 +82,22 @@ public static class DependencyInjection
         services.AddSingleton<IDeleteStagingColumn, DeleteStagingColumnOperation>();
         services.AddSingleton<IStagingColumnExists, StagingColumnExistsOperation>();
         services.AddSingleton<IGetStagingTableByName, GetStagingTableByName>();
+        
+        services.AddDbContextFactory<WorkflowDbContext>(options =>
+            options.UseNpgsql(config.GetConnectionString("DefaultConnection")));
+
+        services.AddSingleton<IGetAllPipelines, GetAllPipelines>();
+        services.AddSingleton<IGetPipelineById, GetPipelineById>();
+        services.AddSingleton<ICreatePipeline, CreatePipeline>();
+        services.AddSingleton<IUpdatePipeline, UpdatePipeline>();
+        services.AddSingleton<IDeletePipeline, DeletePipeline>();
+        
+        services.AddSingleton<IGetPluginById, GetPluginById>();
+        services.AddSingleton<IGetPluginsByPipelineId, GetPluginsByPipelineId>();
+        services.AddSingleton<IAppendPlugin, AppendPlugin>();
+        services.AddSingleton<IUpdatePlugin, UpdatePlugin>();
+        services.AddSingleton<IDeletePlugin, DeletePlugin>();
+        services.AddSingleton<IGetPipelinesByCreatorId, GetPipelinesByCreatorId>();
 
 
         return services;
