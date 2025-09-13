@@ -11,7 +11,7 @@ public sealed class GetPluginsByPipelineId : IGetPluginsByPipelineId
 
     public GetPluginsByPipelineId(IDbContextFactory<WorkflowDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
     }
 
     public async Task<IEnumerable<Plugin>> ExecuteAsync(Guid pipelineId, CancellationToken cancellationToken = default)

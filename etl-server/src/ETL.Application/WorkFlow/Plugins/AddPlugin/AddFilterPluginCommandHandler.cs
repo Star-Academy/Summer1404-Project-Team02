@@ -17,8 +17,8 @@ public sealed class AddFilterPluginCommandHandler : IRequestHandler<AddFilterPlu
 
     public AddFilterPluginCommandHandler(IAppendPlugin appendPlugin, IGetPipelineById getPipelineById)
     {
-        _appendPlugin = appendPlugin;
-        _getPipelineById = getPipelineById;
+        _appendPlugin = appendPlugin ?? throw new ArgumentNullException(nameof(appendPlugin));
+        _getPipelineById = getPipelineById ?? throw new ArgumentNullException(nameof(getPipelineById));
     }
 
     public async Task<Result<Guid>> Handle(AddFilterPluginCommand request, CancellationToken ct)

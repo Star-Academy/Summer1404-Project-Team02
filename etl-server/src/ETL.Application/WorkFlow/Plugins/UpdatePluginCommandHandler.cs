@@ -13,8 +13,8 @@ public sealed class UpdatePluginCommandHandler : IRequestHandler<UpdatePluginCom
 
     public UpdatePluginCommandHandler(IUpdatePlugin updatePlugin, IGetPluginById getPluginById)
     {
-        _updatePlugin = updatePlugin;
-        _getPluginById = getPluginById;
+        _updatePlugin = updatePlugin ?? throw new ArgumentNullException(nameof(updatePlugin));
+        _getPluginById = getPluginById ?? throw new ArgumentNullException(nameof(getPluginById));
     }
 
     public async Task<Result> Handle(UpdatePluginCommand request, CancellationToken cancellationToken)

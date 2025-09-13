@@ -11,7 +11,7 @@ public sealed class AppendPlugin : IAppendPlugin
 
     public AppendPlugin(IDbContextFactory<WorkflowDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
     }
 
     public async Task<Guid> ExecuteAsync(Guid pipelineId, string pluginType, string configuration, CancellationToken cancellationToken = default)

@@ -14,8 +14,8 @@ public sealed class DeletePipelineHandler : IRequestHandler<DeletePipelineComman
 
     public DeletePipelineHandler(IDeletePipeline deletePipeline, IGetPipelineById getPipelineById)
     {
-        _deletePipeline = deletePipeline;
-        _getPipelineById = getPipelineById;
+        _deletePipeline = deletePipeline ?? throw new ArgumentNullException(nameof(deletePipeline));
+        _getPipelineById = getPipelineById ?? throw new ArgumentNullException(nameof(getPipelineById));
     }
 
     public async Task<Result> Handle(DeletePipelineCommand request, CancellationToken cancellationToken)

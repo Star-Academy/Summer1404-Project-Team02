@@ -13,8 +13,8 @@ public sealed class DeletePluginCommandHandler : IRequestHandler<DeletePluginCom
 
     public DeletePluginCommandHandler(IGetPluginById getPluginById, IDeletePlugin deletePlugin)
     {
-        _getPluginById = getPluginById;
-        _deletePlugin = deletePlugin;
+        _getPluginById = getPluginById ?? throw new ArgumentNullException(nameof(getPluginById));
+        _deletePlugin = deletePlugin ?? throw new ArgumentNullException(nameof(deletePlugin));
     }
 
     public async Task<Result> Handle(DeletePluginCommand request, CancellationToken cancellationToken)

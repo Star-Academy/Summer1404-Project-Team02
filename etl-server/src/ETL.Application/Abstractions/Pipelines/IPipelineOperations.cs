@@ -7,6 +7,11 @@ public interface IGetAllPipelines
     Task<IEnumerable<Pipeline>> ExecuteAsync(CancellationToken cancellationToken = default);
 }
 
+public interface IGetPipelinesByCreatorId
+{
+    Task<IEnumerable<Pipeline>> ExecuteAsync(string createdById, CancellationToken cancellationToken = default);
+}
+
 public interface IGetPipelineById
 {
     Task<Pipeline?> ExecuteAsync(Guid id, CancellationToken cancellationToken = default);

@@ -11,7 +11,7 @@ public sealed class GetPluginById : IGetPluginById
 
     public GetPluginById(IDbContextFactory<WorkflowDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
     }
 
     public async Task<Plugin?> ExecuteAsync(Guid pluginId, CancellationToken cancellationToken = default)

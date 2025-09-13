@@ -17,8 +17,9 @@ public sealed class GetPluginsByPipelineIdQueryHandler
         IGetPluginsByPipelineId getPluginsByPipelineId,
         IGetPipelineById getPipelineById)
     {
-        _getPluginsByPipelineId = getPluginsByPipelineId;
-        _getPipelineById = getPipelineById;
+        _getPluginsByPipelineId =
+            getPluginsByPipelineId ?? throw new ArgumentNullException(nameof(getPluginsByPipelineId));
+        _getPipelineById = getPipelineById ?? throw new ArgumentNullException(nameof(getPipelineById));
     }
 
     public async Task<Result<IEnumerable<PluginDto>>> Handle(GetPluginsByPipelineIdQuery request, CancellationToken cancellationToken)

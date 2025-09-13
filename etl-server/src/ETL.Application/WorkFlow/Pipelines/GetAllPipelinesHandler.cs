@@ -10,7 +10,10 @@ public sealed class GetAllPipelinesHandler : IRequestHandler<GetAllPipelinesQuer
 {
     private readonly IGetAllPipelines _getAllPipelines;
 
-    public GetAllPipelinesHandler(IGetAllPipelines getAllPipelines) => _getAllPipelines = getAllPipelines;
+    public GetAllPipelinesHandler(IGetAllPipelines getAllPipelines)
+    {
+        _getAllPipelines = getAllPipelines ?? throw new ArgumentNullException(nameof(getAllPipelines));
+    }
 
     public async Task<Result<IEnumerable<PipelineDto>>> Handle(GetAllPipelinesQuery request, CancellationToken cancellationToken)
     {

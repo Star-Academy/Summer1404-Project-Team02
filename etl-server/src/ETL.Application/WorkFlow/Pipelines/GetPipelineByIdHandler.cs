@@ -12,7 +12,10 @@ public sealed class GetPipelineByIdHandler : IRequestHandler<GetPipelineByIdQuer
 {
     private readonly IGetPipelineById _getPipelineById;
 
-    public GetPipelineByIdHandler(IGetPipelineById getPipelineById) => _getPipelineById = getPipelineById;
+    public GetPipelineByIdHandler(IGetPipelineById getPipelineById)
+    {
+        _getPipelineById = getPipelineById ?? throw new ArgumentNullException(nameof(getPipelineById));
+    }
 
     public async Task<Result<PipelineDto>> Handle(GetPipelineByIdQuery request, CancellationToken cancellationToken)
     {

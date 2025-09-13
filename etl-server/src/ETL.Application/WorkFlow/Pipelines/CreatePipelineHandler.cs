@@ -6,7 +6,7 @@ using MediatR;
 
 namespace ETL.Application.WorkFlow.Pipelines;
 
-public record CreatePipelineCommand(string Name, Guid DataSourceId) : IRequest<Result<Guid>>;
+public record CreatePipelineCommand(string Name, Guid DataSourceId, string UserId) : IRequest<Result<Guid>>;
 
 public sealed class CreatePipelineHandler : IRequestHandler<CreatePipelineCommand, Result<Guid>>
 {
@@ -15,8 +15,8 @@ public sealed class CreatePipelineHandler : IRequestHandler<CreatePipelineComman
 
     public CreatePipelineHandler(ICreatePipeline service, IGetDataSetById getDataSetById)
     {
-        _createPipeline = service;
-        _getDataSetById = getDataSetById;
+        _createPipeline = service ?? throw new ArgumentNullException(nameof(service));
+        _getDataSetById = getDataSetById ?? throw new ArgumentNullException(nameof(getDataSetById));
     }
 
     public async Task<Result<Guid>> Handle(CreatePipelineCommand request, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ public sealed class CreatePipelineHandler : IRequestHandler<CreatePipelineComman
                 $"Data Source {request.DataSourceId} not found"));
 
         // if pipeline names should be unique, add it to constraints and check it here.
-        var pipeline = new Pipeline(request.Name, request.DataSourceId);
+        var pipeline = new Pipeline(request.Name, request.DataSourceId, request.UserId);
         var created = await _createPipeline.ExecuteAsync(pipeline, cancellationToken);
         return Result.Success(created);
     }

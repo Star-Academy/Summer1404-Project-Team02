@@ -8,7 +8,10 @@ namespace ETL.Infrastructure.Transform.PipelineOperations;
 public class GetPipelineById : IGetPipelineById
 {
     private readonly IDbContextFactory<WorkflowDbContext> _contextFactory;
-    public GetPipelineById(IDbContextFactory<WorkflowDbContext> contextFactory) => _contextFactory = contextFactory;
+    public GetPipelineById(IDbContextFactory<WorkflowDbContext> contextFactory)
+    { 
+        _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
+    }
 
     public async Task<Pipeline?> ExecuteAsync(Guid id, CancellationToken cancellationToken = default)
     {

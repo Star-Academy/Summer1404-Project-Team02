@@ -97,6 +97,8 @@ public static class DependencyInjection
         services.AddSingleton<IAppendPlugin, AppendPlugin>();
         services.AddSingleton<IUpdatePlugin, UpdatePlugin>();
         services.AddSingleton<IDeletePlugin, DeletePlugin>();
+        services.AddSingleton<IGetPipelinesByCreatorId, GetPipelinesByCreatorId>();
+
 
         return services;
     }

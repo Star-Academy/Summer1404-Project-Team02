@@ -11,7 +11,7 @@ public sealed class DeletePlugin : IDeletePlugin
 
     public DeletePlugin(IDbContextFactory<WorkflowDbContext> contextFactory)
     {
-        _contextFactory = contextFactory;
+        _contextFactory = contextFactory ?? throw new ArgumentNullException(nameof(contextFactory));
     }
 
     public async Task ExecuteAsync(Plugin plugin, CancellationToken cancellationToken = default)

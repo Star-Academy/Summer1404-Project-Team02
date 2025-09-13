@@ -41,6 +41,8 @@ public class WorkflowDbContext : DbContext
         {
             entity.HasKey(p => p.Id);
             entity.Property(p => p.Name).IsRequired().HasMaxLength(255);
+            entity.Property(p => p.CreatedByUserId).IsRequired();
+
 
             // Pipeline → Plugin (1:N)
             entity.HasMany(p => p.Plugins)

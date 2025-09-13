@@ -14,7 +14,7 @@ public sealed class GetPluginByIdQueryHandler : IRequestHandler<GetPluginByIdQue
 
     public GetPluginByIdQueryHandler(IGetPluginById getPluginById)
     {
-        _getPluginById = getPluginById;
+        _getPluginById = getPluginById ?? throw new ArgumentNullException(nameof(getPluginById));
     }
 
     public async Task<Result<PluginDto>> Handle(GetPluginByIdQuery request, CancellationToken cancellationToken)

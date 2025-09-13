@@ -13,8 +13,8 @@ public sealed class RenamePipelineHandler : IRequestHandler<RenamePipelineComman
 
     public RenamePipelineHandler(IUpdatePipeline updatePipeline, IGetPipelineById getPipelineById)
     {
-        _updatePipeline = updatePipeline;
-        _getPipelineById = getPipelineById;
+        _updatePipeline = updatePipeline ?? throw new ArgumentNullException(nameof(updatePipeline));
+        _getPipelineById = getPipelineById ?? throw new ArgumentNullException(nameof(getPipelineById));
     }
 
     public async Task<Result> Handle(RenamePipelineCommand request, CancellationToken cancellationToken)
