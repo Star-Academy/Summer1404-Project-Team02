@@ -2,6 +2,7 @@
 using ETL.Application.Common.Constants;
 using ETL.Application.WorkFlow.Plugins;
 using ETL.Application.WorkFlow.Plugins.AddPlugin;
+using ETL.Application.WorkFlow.Plugins.UpdatePlugin;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -52,9 +53,20 @@ public class PluginsController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpPut("update")]
+    [HttpPut("update-aggregation-plugin")]
     [Authorize(Policy = Policy.CanManageWorkflows)]
-    public async Task<IActionResult> Update([FromBody] UpdatePluginCommand request, CancellationToken ct)
+    public async Task<IActionResult> Update([FromBody] UpdateAggregationPluginCommand request, CancellationToken ct)
+    {
+        var result = await _mediator.Send(request, ct);
+        if (result.IsFailure)
+            return this.ToActionResult(result.Error);
+
+        return Ok(new { message = "plugin has been updated." });
+    }
+    
+    [HttpPut("update-filter-plugin")]
+    [Authorize(Policy = Policy.CanManageWorkflows)]
+    public async Task<IActionResult> Update([FromBody] UpdateFilterPluginCommand request, CancellationToken ct)
     {
         var result = await _mediator.Send(request, ct);
         if (result.IsFailure)

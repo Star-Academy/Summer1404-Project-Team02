@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using ETL.Application.Abstractions.Pipelines;
 using ETL.Application.Common;
+using ETL.Application.Common.Constants;
 using ETL.Application.Common.DTOs.PluginConfigurations;
 using MediatR;
 
@@ -32,8 +33,8 @@ public sealed class AddFilterPluginCommandHandler : IRequestHandler<AddFilterPlu
         
         var configJson = JsonSerializer.Serialize(request.Configuration);
 
-        var pluginId = 
-            await _appendPlugin.ExecuteAsync(request.PipelineId, "Filter", configJson, ct);
+        var pluginId =
+            await _appendPlugin.ExecuteAsync(request.PipelineId, PluginTypes.Filter, configJson, ct);
 
         return Result.Success(pluginId);
     }
