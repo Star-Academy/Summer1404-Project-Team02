@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ETL.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/pipelines")]
 public class PipelinesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -47,7 +47,7 @@ public class PipelinesController : ControllerBase
             return this.ToActionResult(result.Error);
         return Ok(result.Value);
     }
-    
+
     [HttpGet("{pipelineId}/get-plugins")]
     [Authorize(Policy = Policy.CanViewWorkflows)]
     public async Task<IActionResult> GetAll(Guid pipelineId, CancellationToken ct)
@@ -55,7 +55,7 @@ public class PipelinesController : ControllerBase
         var result = await _mediator.Send(new GetPluginsByPipelineIdQuery(pipelineId), ct);
         if (result.IsFailure)
             return this.ToActionResult(result.Error);
-    
+
         return Ok(result.Value);
     }
 
@@ -63,8 +63,8 @@ public class PipelinesController : ControllerBase
     [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Create([FromBody] CreatePipelineRequest request, CancellationToken ct)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "";
-        var command = new CreatePipelineCommand(request.PipelineName, request.DataSourceId, userId);
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var command = new CreatePipelineCommand(request.PipelineName, request.DataSourceId, userId!);
 
         var result = await _mediator.Send(command, ct);
         if (result.IsFailure)

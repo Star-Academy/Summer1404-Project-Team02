@@ -10,15 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 namespace ETL.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/plugins")]
 public class PluginsController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public PluginsController(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
+    public PluginsController(IMediator mediator) => _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
 
     [HttpGet("{pluginId}")]
     [Authorize(Policy = Policy.CanViewWorkflows)]
@@ -41,7 +38,7 @@ public class PluginsController : ControllerBase
 
         return Ok(result.Value);
     }
-    
+
     [HttpPost("add-aggregation-plugin")]
     [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> AddAggregationPlugin([FromBody] AddAggregationPluginCommand request, CancellationToken ct)
@@ -63,7 +60,7 @@ public class PluginsController : ControllerBase
 
         return Ok(new { message = "plugin has been updated." });
     }
-    
+
     [HttpPut("update-filter-plugin")]
     [Authorize(Policy = Policy.CanManageWorkflows)]
     public async Task<IActionResult> Update([FromBody] UpdateFilterPluginCommand request, CancellationToken ct)
