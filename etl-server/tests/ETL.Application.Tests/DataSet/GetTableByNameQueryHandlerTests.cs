@@ -52,7 +52,7 @@ public class GetTableByNameQueryHandlerTests
 
         // Assert
         result.IsFailure.Should().BeTrue();
-        result.Error.Code.Should().Be("TableRemove.Failed");
+        result.Error.Code.Should().Be("Table.Get.Failed");
     }
 
     [Fact]
